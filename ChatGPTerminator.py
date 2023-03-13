@@ -3,6 +3,17 @@ from rich.prompt import Prompt
 from rich.console import Console
 from rich.markdown import Markdown
 import tomllib
+import os
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def complete_chat(prompt: str,chat_history: list[dict]) -> str:
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages= chat_history + {"role": "user", "content": prompt}
+    )
+    # return response
+    return response['choices'][0]['message']['content']
 
 if __name__ == '__main__':
 
