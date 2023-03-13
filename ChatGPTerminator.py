@@ -50,6 +50,7 @@ if __name__ == '__main__':
      | |__| | |      | |  __/ |  | | | | | | | | | | (_| | || (_) | |   
       \_____|_|      |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|\__\___/|_|   '''
     console.print(f"[bold green]{welcome_ascii}[/bold green]")
+    console.print(f"[bold green]Initial prompt: {config['system-msg']}[/bold green]")
     console.print(f"[dark-green]Model: {config['model']}[/dark-green]\n")
     
     messages = [] #List of responses along with system prompt
