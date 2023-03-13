@@ -59,8 +59,9 @@ if __name__ == '__main__':
     console.print(resp_md)
     messages = [] #List of responses along with system prompt
     messages.append({"role": "system","content" : config['system-msg']}) 
-    
+     
     response = complete_chat(usr_in, messages)
     messages.append({"role": "assistant", "content" : response})
-    print(response)
+    resp_md = Markdown(response)
+    console.print(resp_md)
 
