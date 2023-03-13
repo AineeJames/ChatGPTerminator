@@ -6,6 +6,7 @@ from rich.spinner import Spinner
 from rich.live import Live
 import tomllib
 import os
+import signal
 
 def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     ''' 
@@ -26,9 +27,14 @@ def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     # return response
     return response['choices'][0]['message']['content']
 
+def handle_sigint(signum, frame):
+    console.print("\n[bold green]Closing...[/bold green]")
+    exit()                                                                                           
 
 if __name__ == '__main__':
 
+    signal.signal(signal.SIGINT, handle_sigint)                                                                                                   
+                                                                                                                                               
     console = Console()
 
     api_key = os.getenv("OPENAI_API_KEY")
