@@ -8,6 +8,8 @@ from rich.panel import Panel
 import tomllib
 import os
 import signal
+from datetime import datetime
+import json
 
 def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     ''' 
@@ -32,8 +34,26 @@ def handle_sigint(signum, frame):
     console.print("\n[bold green]Closing...[/bold green]")
     exit()                                                                                           
 
-if __name__ == '__main__':
+def make_chat_record():
+    if not os.path.exists("chatlog"):
+        os.makedirs("chatlog")
+     # Get the current timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    # Create the file in the chatlog directory with the same name as the timestamp 
+    file_path = os.path.join("chatlog", timestamp + '.txt')
+    with open(file_path, 'w') as file:
+        file.write('This is a file created at ' + timestamp)
+        print('File created with name:', file_path)
+    return file_path
 
+def save_chatlog(log_path,messages):
+    # use json to save a log of the messages sent each time
+    # user sends a message
+    with open(log_path, 'w') as f:
+        json.dump(messages, f, indent = 4)
+
+if __name__ == '__main__':
+    log_path = make_chat_record()
     signal.signal(signal.SIGINT, handle_sigint)                                                                                                   
                                                                                                                                                
     console = Console()
@@ -77,3 +97,4 @@ if __name__ == '__main__':
         messages.append({"role": "assistant", "content" : response})
         resp_md = Markdown(response)
         console.print(Panel.fit(resp_md, border_style="blue"))
+        save_chatlog(log_path,messages)
