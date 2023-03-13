@@ -2,6 +2,8 @@ import openai
 from rich.prompt import Prompt
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.spinner import Spinner
+from rich.live import Live
 import tomllib
 import os
 
@@ -16,7 +18,7 @@ def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     ]
 	'''
     chat_history.append({"role": "user", "content": prompt})
-    print(chat_history)
+    # print(chat_history)
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages= chat_history
@@ -49,26 +51,20 @@ if __name__ == '__main__':
       \_____|_|      |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|\__\___/|_|   '''
     console.print(f"[bold green]{welcome_ascii}[/bold green]")
     console.print(f"[dark-green]Model: {config['model']}[/dark-green]\n")
-
     usr_in = Prompt.ask("[bold green]Input[/bold green][bold gray]>[/bold gray]")
-    resp = '''
-    This is a test:
-    ```python
-    import os
-    print("hello world")
-    # here is a comment
-    ```
-    - a
-    - b
-    - c
-    '''
-    resp_md = Markdown(resp)
-    console.print(f"[bold green]GPTerminator[/bold green][bold gray] > [/bold gray]")
-    console.print(resp_md)
+    
     messages = [] #List of responses along with system prompt
-    messages.append({"role": "system","content" : config['system-msg']}) 
-     
-    response = complete_chat(usr_in, messages)
+    messages.append({"role": "system","content" : config['system-msg']})  
+    spinner = Spinner("aesthetic")
+    with Live(
+        Spinner("aesthetic"),
+        transient = True,
+        refresh_per_second = 20,
+        ) as live:
+            response = complete_chat(usr_in, messages)
+
+    console.clear_live()
+
     messages.append({"role": "assistant", "content" : response})
     resp_md = Markdown(response)
     console.print(resp_md)
