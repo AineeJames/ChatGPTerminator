@@ -6,7 +6,6 @@ import tomllib
 import os
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
 def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     ''' 
 	chat_hist is list of messages in format
@@ -17,9 +16,11 @@ def complete_chat(prompt: str,chat_history: list[dict]) -> str:
         {"role": "user", "content": "Where was it played?"}
     ]
 	'''
+    chat_history.append({"role": "user", "content": prompt})
+    print(chat_history)
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages= chat_history + {"role": "user", "content": prompt}
+        messages= chat_history
     )
     # return response
     return response['choices'][0]['message']['content']
@@ -56,3 +57,10 @@ if __name__ == '__main__':
     resp_md = Markdown(resp)
     console.print(f"[bold green]GPTerminator[/bold green][bold gray] > [/bold gray]")
     console.print(resp_md)
+    messages = [] #List of responses along with system prompt
+    messages.append({"role": "system","content" : config['system-msg']}) 
+    
+    response = complete_chat(usr_in, messages)
+    messages.append({"role": "assistant", "content" : response})
+    print(response)
+
