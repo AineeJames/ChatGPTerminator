@@ -1,4 +1,4 @@
-#GPTerminal - A ChatGPT Terminal Interface :robot:
+# GPTerminal - A ChatGPT Terminal Interface :robot:
 
 This terminal interface provides a convenient way to interact with ChatGPT using your command line interface.
 
