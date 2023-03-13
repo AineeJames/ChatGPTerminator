@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.spinner import Spinner
 from rich.live import Live
+from rich.panel import Panel
 import tomllib
 import os
 import signal
@@ -74,5 +75,5 @@ if __name__ == '__main__':
 
         messages.append({"role": "assistant", "content" : response})
         resp_md = Markdown(response)
-        console.print(resp_md)
+        console.print(Panel.fit(resp_md, border_style="blue"))
 
