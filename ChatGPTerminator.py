@@ -51,21 +51,22 @@ if __name__ == '__main__':
       \_____|_|      |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|\__\___/|_|   '''
     console.print(f"[bold green]{welcome_ascii}[/bold green]")
     console.print(f"[dark-green]Model: {config['model']}[/dark-green]\n")
-    usr_in = Prompt.ask("[bold green]Input[/bold green][bold gray]>[/bold gray]")
     
     messages = [] #List of responses along with system prompt
     messages.append({"role": "system","content" : config['system-msg']})  
-    spinner = Spinner("aesthetic")
-    with Live(
-        Spinner("aesthetic"),
-        transient = True,
-        refresh_per_second = 20,
-        ) as live:
-            response = complete_chat(usr_in, messages)
+    while True:
+        usr_in = Prompt.ask("[bold green]Input[/bold green][bold gray]>[/bold gray]")
+        spinner = Spinner("aesthetic")
+        with Live(
+            Spinner("aesthetic"),
+            transient = True,
+            refresh_per_second = 20,
+            ) as live:
+                response = complete_chat(usr_in, messages)
 
-    console.clear_live()
+        console.clear_live()
 
-    messages.append({"role": "assistant", "content" : response})
-    resp_md = Markdown(response)
-    console.print(resp_md)
+        messages.append({"role": "assistant", "content" : response})
+        resp_md = Markdown(response)
+        console.print(resp_md)
 
