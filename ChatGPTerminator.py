@@ -1,6 +1,9 @@
 import openai
 from rich import print, inspect
 import tomllib
+import os
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 with open("config.toml", "rb") as f:
     config = tomllib.load(f)
