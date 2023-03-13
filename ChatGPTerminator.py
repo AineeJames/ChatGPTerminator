@@ -5,8 +5,6 @@ from rich.markdown import Markdown
 import tomllib
 import os
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -15,9 +13,18 @@ def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     # return response
     return response['choices'][0]['message']['content']
 
+
 if __name__ == '__main__':
 
     console = Console()
+
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key == None or '':
+        console.print(f"[bold red]ERROR: [/bold red]Please provide an OPENAI_API_KEY evn varible")
+        help_msg = Markdown("""```bash\nexport OPENAI_API_KEY=<place api key here>\n```""")
+        console.print(help_msg)
+        exit()
+    openai.api_key = api_key
 
     with open("config.toml", "rb") as f:
         config = tomllib.load(f)
