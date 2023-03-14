@@ -17,7 +17,7 @@ import logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 from prompt_toolkit import prompt
 
-def complete_chat(prompt: str,chat_history: list[dict]) -> str:
+def complete_chat(prompt: str,chat_history: list[dict],model) -> str:
     ''' 
 	chat_hist is list of messages in format
     messages=[
@@ -30,7 +30,7 @@ def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     chat_history.append({"role": "user", "content": prompt})
     # print(chat_history)
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages= chat_history
     )
     # return response
@@ -99,7 +99,7 @@ if __name__ == '__main__':
             transient = True,
             refresh_per_second = 20,
             ) as live:
-                response = complete_chat(usr_in, messages)
+                response = complete_chat(usr_in, messages,config['model'])
 
         console.clear_live()
 
