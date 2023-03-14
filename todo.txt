@@ -1,2 +1,0 @@
-click on response to copy the raw text
-add multiline input
