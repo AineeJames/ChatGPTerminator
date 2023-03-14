@@ -15,6 +15,7 @@ import json
 import logging
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+from prompt_toolkit import prompt
 
 def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     ''' 
@@ -77,21 +78,21 @@ if __name__ == '__main__':
     with open("config.toml", "rb") as f:
         config = tomllib.load(f)
 
-    welcome_ascii = '''
-       _____ _____ _______                  _             _             
-      / ____|  __ \__   __|                (_)           | |            
-     | |  __| |__) | | | ___ _ __ _ __ ___  _ _ __   __ _| |_ ___  _ __ 
-     | | |_ |  ___/  | |/ _ \ '__| '_ ` _ \| | '_ \ / _` | __/ _ \| '__|
-     | |__| | |      | |  __/ |  | | | | | | | | | | (_| | || (_) | |   
-      \_____|_|      |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|\__\___/|_|   '''
-    console.print(f"[bold green]{welcome_ascii}[/bold green]")
+    welcome_ascii = '''                                                        
+ _____ _____ _____               _         _           
+|   __|  _  |_   _|___ ___ _____|_|___ ___| |_ ___ ___ 
+|  |  |   __| | | | -_|  _|     | |   | .'|  _| . |  _|
+|_____|__|    |_| |___|_| |_|_|_|_|_|_|__,|_| |___|_|  
+'''                                                       
+    console.print(f"[bold green]{welcome_ascii}[/bold green]", end='')
     console.print(f"[bold green]Initial prompt: {config['system-msg']}[/bold green]")
     console.print(f"[dark-green]Model: {config['model']}[/dark-green]\n")
     
     messages = [] #List of responses along with system prompt
     messages.append({"role": "system","content" : config['system-msg']})  
     while True:
-        usr_in = Prompt.ask("[bold green]Input[/bold green][bold gray]>[/bold gray]")
+        console.print("[bold green]Input[/bold green][bold gray] > [/bold gray]", end="")
+        usr_in = prompt()
         spinner = Spinner("aesthetic")
         with Live(
             Spinner("aesthetic"),
