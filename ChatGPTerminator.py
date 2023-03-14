@@ -103,8 +103,8 @@ if __name__ == '__main__':
 |_____|__|    |_| |___|_| |_|_|_|_|_|_|__,|_| |___|_|  
 '''                                                       
     console.print(f"[bold green]{welcome_ascii}[/bold green]", end='')
-    console.print(f"[bold green]Initial prompt: {config['system-msg']}[/bold green]")
-    console.print(f"[dark-green]Model: {config['model']}[/dark-green]\n")
+    console.print(f"[bright_black]System prompt: {config['system-msg']}[/]")
+    console.print(f"[bright_black]Model: {config['model']}[/]\n")
     
     messages = [] #List of responses along with system prompt
     messages.append({"role": "system","content" : config['system-msg']})  
@@ -126,8 +126,8 @@ if __name__ == '__main__':
 
         messages.append({"role": "assistant", "content" : response})
         resp_md = Markdown(response)
-        console.rule(title="Response", align="left", style="gray")
+        console.rule(title="Response", align="left", style="bright_black")
         console.print(resp_md)
-        console.rule(title=get_curr_time(), align="right", style="gray")
+        console.rule(title=get_curr_time(), align="right", style="bright_black")
         console.print()
         save_chatlog(log_path,messages)
