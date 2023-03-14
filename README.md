@@ -34,6 +34,20 @@ To use this terminal interface, follow these steps:
 
 7. You can now start chatting. Type a message and press Enter to get a response.
 
+
+
+## Configuration
+
+Currently, a couple basic configuration settings are available for GPTerminal.
+
+   ```
+   system-msg="You are a helpful assistant."
+   model="gpt-3.5-turbo"
+   ```
+
+- **system-msg:** this is the system message sent to openai's api
+- **model:** this is the model that GPTerminal
+
 ## Screenshots :camera:
 
 Here are some screenshots of the ChatGPT terminal interface:
