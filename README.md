@@ -1,5 +1,7 @@
 # GPTerminal - A ChatGPT Terminal Interface :robot:
 
+![Screenshot of GPTerminal](./imgs/example.png)
+
 This terminal interface provides a convenient way to interact with ChatGPT using your command line interface.
 
 ## Getting Started :rocket:
