@@ -20,13 +20,19 @@ To use this terminal interface, follow these steps:
    pip install -r < requirements.txt
    ```
 
-5. Run the following command to start the ChatGPT terminal interface:
+5. Set the OPENAI_API_KEY env variable
+
+   ```
+   export OPENAI_API_KEY="PUT_API_KEY_HERE"
+   ```
+
+6. Run the following command to start the ChatGPT terminal interface:
 
    ```
    python ChatGPTerminal.py
    ```
 
-6. You can now start chatting. Type a message and press Enter to get a response.
+7. You can now start chatting. Type a message and press Enter to get a response.
 
 ## Screenshots :camera:
 
