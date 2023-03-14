@@ -2,3 +2,4 @@ venv/
 apikey.txt
 *~
 chatlog/
+__pycache__/
