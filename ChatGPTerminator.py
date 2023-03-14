@@ -104,14 +104,15 @@ if __name__ == '__main__':
 '''                                                       
     console.print(f"[bold green]{welcome_ascii}[/bold green]", end='')
     console.print(f"[bright_black]System prompt: {config['system-msg']}[/]")
-    console.print(f"[bright_black]Model: {config['model']}[/]\n")
+    console.print(f"[bright_black]Model: {config['model']}[/]")
+    console.print("[bright_black]Type 'exit' or 'q' to quit the program[/]\n")
     
     messages = [] #List of responses along with system prompt
     messages.append({"role": "system","content" : config['system-msg']})  
     while True:
         console.print("[bold green]Input[/bold green][bold gray] > [/bold gray]", end="")
         usr_in = prompt()
-        if usr_in == 'exit':
+        if usr_in == 'exit' or usr_in == 'q':
             sys.exit()
 
         spinner = Spinner("aesthetic")
