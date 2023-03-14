@@ -43,7 +43,6 @@ def make_chat_record():
     file_path = os.path.join("chatlog", timestamp + '.txt')
     with open(file_path, 'w') as file:
         file.write('This is a file created at ' + timestamp)
-        print('File created with name:', file_path)
     return file_path
 
 def save_chatlog(log_path,messages):
