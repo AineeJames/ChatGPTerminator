@@ -126,11 +126,16 @@ if __name__ == '__main__':
     console.print("[bright_black]Type '!q' to quit the program; '!help' for a list of cmds[/]\n")
     
     messages = [] #List of responses along with system prompt
-    messages.append({"role": "system","content" : config['system-msg']})  
+    messages.append({"role": "system","content" : config['system-msg']})
+
+    prompt_count = 1
     while True:
-        console.print("[bold green]Input[/bold green][bold gray] > [/bold gray]", end="")
+        console.print(f"[yellow]|{prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]", end="")
         usr_in = prompt().strip()
-        if usr_in[0] == '!':
+        prompt_count += 1
+        if usr_in == '':
+            console.print(f"[bold red]ERROR: [/bold red]Please provide a prompt or command!")
+        elif usr_in[0] == '!':
             parse_cmd(usr_in)
         else:
             spinner = Spinner("aesthetic")
