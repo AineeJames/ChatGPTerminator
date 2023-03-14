@@ -9,7 +9,12 @@ import tomllib
 import os
 import signal
 from datetime import datetime
+from datetime import timezone
+from zoneinfo import ZoneInfo
 import json
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 def complete_chat(prompt: str,chat_history: list[dict]) -> str:
     ''' 
@@ -28,21 +33,25 @@ def complete_chat(prompt: str,chat_history: list[dict]) -> str:
         messages= chat_history
     )
     # return response
+    logging.debug(f"Got response from openai api")
     return response['choices'][0]['message']['content']
 
 def handle_sigint(signum, frame):
     console.print("\n[bold green]Closing...[/bold green]")
+    logging.debug(f"Handling SIGINT and closing program")
     exit()                                                                                           
 
 def make_chat_record():
     if not os.path.exists("chatlog"):
         os.makedirs("chatlog")
      # Get the current timestamp
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    timestamp = datetime.now().astimezone().strftime("%Y-%m-%d_%H-%M-%S")
+
     # Create the file in the chatlog directory with the same name as the timestamp 
     file_path = os.path.join("chatlog", timestamp + '.txt')
     with open(file_path, 'w') as file:
         file.write('This is a file created at ' + timestamp)
+        logging.debug(f"Made initial log file at {file_path}")
     return file_path
 
 def save_chatlog(log_path,messages):
