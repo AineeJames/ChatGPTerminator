@@ -13,8 +13,17 @@ from datetime import timezone
 from zoneinfo import ZoneInfo
 import json
 import logging
+import argparse
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+parser = argparse.ArgumentParser(description="Toggle logging")
+parser.add_argument('--log', action='store_true', help='enable logging')
+args = parser.parse_args()
+
+if args.log:
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+else:
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
+
 from prompt_toolkit import prompt
 
 def complete_chat(prompt: str,chat_history: list[dict],model) -> str:
