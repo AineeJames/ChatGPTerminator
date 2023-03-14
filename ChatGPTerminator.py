@@ -114,5 +114,5 @@ if __name__ == '__main__':
 
         messages.append({"role": "assistant", "content" : response})
         resp_md = Markdown(response)
-        console.print(Panel.fit(resp_md, border_style="blue"))
+        console.print(resp_md)
         save_chatlog(log_path,messages)
