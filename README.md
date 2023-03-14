@@ -19,7 +19,7 @@ To use this terminal interface, follow these steps:
 4. Install the pip requirements into the venv:
 
    ```
-   pip install -r < requirements.txt
+   pip install -r requirements.txt
    ```
 
 5. Set the OPENAI_API_KEY env variable
