@@ -53,13 +53,6 @@ def complete_chat(prompt: str,chat_history: list[dict],model) -> str:
     logging.debug(f"Got response from openai api")
     return response['choices'][0]['message']['content']
 
-def handle_sigint(signum, frame):
-    console.print("\n[bold green]Closing...[/bold green]")
-    logging.debug(f"Handling SIGINT and closing program")
-    #exit()
-    #sys.exit()
-    quit()
-
 def make_chat_record():
     if not os.path.exists("chatlog"):
         os.makedirs("chatlog")
@@ -86,7 +79,6 @@ def get_curr_time() -> str:
 
 if __name__ == '__main__':
     log_path = make_chat_record()
-    signal.signal(signal.SIGINT, handle_sigint)                                                                                                   
                                                                                                                                                
     console = Console()
 
