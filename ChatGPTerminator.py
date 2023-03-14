@@ -77,6 +77,24 @@ def get_curr_time() -> str:
     current_time = now.strftime("%I:%M:%S %p") 
     return current_time
 
+def help_msg():
+    cmd_desc_lst = {'q': 'a way to exit the program',
+                'help': 'lists all the possible commands'
+                }
+    console.print(f"[bold bright_black]List of cmds...[/]")
+    for cmd, desc in cmd_desc_lst.items():
+        console.print(f"[bright_black]!{cmd} : {desc}[/]")
+
+def parse_cmd(usr_in):
+    cmd = usr_in.split('!')[1].lower() # gets the str right after the ! in lowercase
+    if cmd == 'q':
+        sys.exit()
+    elif cmd == 'help':
+        help_msg()
+    else:
+        console.print(f"[bold red]ERROR: [/bold red]Command '!{cmd}' not recognized, type '!help' for a list of cmds")
+        
+
 if __name__ == '__main__':
     log_path = make_chat_record()
                                                                                                                                                
@@ -105,30 +123,30 @@ if __name__ == '__main__':
     console.print(f"[bold green]{welcome_ascii}[/bold green]", end='')
     console.print(f"[bright_black]System prompt: {config['system-msg']}[/]")
     console.print(f"[bright_black]Model: {config['model']}[/]")
-    console.print("[bright_black]Type 'exit' or 'q' to quit the program[/]\n")
+    console.print("[bright_black]Type '!q' to quit the program; '!help' for a list of cmds[/]\n")
     
     messages = [] #List of responses along with system prompt
     messages.append({"role": "system","content" : config['system-msg']})  
     while True:
         console.print("[bold green]Input[/bold green][bold gray] > [/bold gray]", end="")
-        usr_in = prompt()
-        if usr_in == 'exit' or usr_in == 'q':
-            sys.exit()
+        usr_in = prompt().strip()
+        if usr_in[0] == '!':
+            parse_cmd(usr_in)
+        else:
+            spinner = Spinner("aesthetic")
+            with Live(
+                Spinner("aesthetic"),
+                transient = True,
+                refresh_per_second = 20,
+                ) as live:
+                    response = complete_chat(usr_in, messages,config['model'])
 
-        spinner = Spinner("aesthetic")
-        with Live(
-            Spinner("aesthetic"),
-            transient = True,
-            refresh_per_second = 20,
-            ) as live:
-                response = complete_chat(usr_in, messages,config['model'])
+            console.clear_live()
 
-        console.clear_live()
-
-        messages.append({"role": "assistant", "content" : response})
-        resp_md = Markdown(response)
-        console.rule(title="Response", align="left", style="bright_black")
-        console.print(resp_md)
-        console.rule(title=get_curr_time(), align="right", style="bright_black")
-        console.print()
-        save_chatlog(log_path,messages)
+            messages.append({"role": "assistant", "content" : response})
+            resp_md = Markdown(response)
+            console.rule(title="Response", align="left", style="bright_black")
+            console.print(resp_md)
+            console.rule(title=get_curr_time(), align="right", style="bright_black")
+            console.print()
+            save_chatlog(log_path,messages)
