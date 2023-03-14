@@ -20,6 +20,7 @@ from zoneinfo import ZoneInfo
 import json
 import logging
 import argparse
+import sys
 
 parser = argparse.ArgumentParser(description="Toggle logging")
 parser.add_argument('--log', action='store_true', help='enable logging')
@@ -55,7 +56,9 @@ def complete_chat(prompt: str,chat_history: list[dict],model) -> str:
 def handle_sigint(signum, frame):
     console.print("\n[bold green]Closing...[/bold green]")
     logging.debug(f"Handling SIGINT and closing program")
-    exit()                                                                                           
+    #exit()
+    #sys.exit()
+    quit()
 
 def make_chat_record():
     if not os.path.exists("chatlog"):
@@ -116,6 +119,9 @@ if __name__ == '__main__':
     while True:
         console.print("[bold green]Input[/bold green][bold gray] > [/bold gray]", end="")
         usr_in = prompt()
+        if usr_in == 'exit':
+            sys.exit()
+
         spinner = Spinner("aesthetic")
         with Live(
             Spinner("aesthetic"),
