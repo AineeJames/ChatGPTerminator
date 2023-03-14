@@ -40,20 +40,13 @@ To use this terminal interface, follow these steps:
 
 Currently, a couple basic configuration settings are available for GPTerminal.
 
-   ```
+   ```toml
    system-msg="You are a helpful assistant."
    model="gpt-3.5-turbo"
    ```
 
 - **system-msg:** this is the system message sent to openai's api
 - **model:** this is the model that GPTerminal
-
-## Screenshots :camera:
-
-Here are some screenshots of the ChatGPT terminal interface:
-
-![ChatGPT Terminal Interface Screenshot 1](screenshots/screenshot1.png)
-![ChatGPT Terminal Interface Screenshot 2](screenshots/screenshot2.png)
 
 ## Contributing :raised_hands:
 
