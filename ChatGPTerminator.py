@@ -5,7 +5,13 @@ from rich.markdown import Markdown
 from rich.spinner import Spinner
 from rich.live import Live
 from rich.panel import Panel
-import tomllib
+py3tomllib = False
+try:
+    import tomllib
+    py3tomllib = True
+except: 
+    import toml
+    py3tomllib = False
 import os
 import signal
 from datetime import datetime
@@ -85,7 +91,10 @@ if __name__ == '__main__':
     openai.api_key = api_key
 
     with open("config.toml", "rb") as f:
-        config = tomllib.load(f)
+        if py3tomllib:
+            config = tomllib.load(f)
+        else:
+            config = toml.load("config.toml")
 
     welcome_ascii = '''                                                        
  _____ _____ _____               _         _           
