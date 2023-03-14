@@ -76,6 +76,11 @@ def save_chatlog(log_path,messages):
     with open(log_path, 'w') as f:
         json.dump(messages, f, indent = 4)
 
+def get_curr_time() -> str:
+    now = datetime.now()
+    current_time = now.strftime("%I:%M:%S %p") 
+    return current_time
+
 if __name__ == '__main__':
     log_path = make_chat_record()
     signal.signal(signal.SIGINT, handle_sigint)                                                                                                   
@@ -123,6 +128,8 @@ if __name__ == '__main__':
 
         messages.append({"role": "assistant", "content" : response})
         resp_md = Markdown(response)
+        console.rule(title="Response", align="left", style="gray")
         console.print(resp_md)
-        console.rule(style="gray")
+        console.rule(title=get_curr_time(), align="right", style="gray")
+        console.print()
         save_chatlog(log_path,messages)
