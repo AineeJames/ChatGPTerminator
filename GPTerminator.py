@@ -18,7 +18,7 @@ class GPTerminator:
         self.msg_hist = []
         self.cmd_init = ''
         self.cmds = {
-                "q": "quits the program",
+                "quit": "quits the program",
                 "help": "prints a list of acceptable commands",
                 "regen": "requeries the last message",
                 "save": "saves the chat history",
@@ -62,7 +62,7 @@ class GPTerminator:
         elif user_in[0] == self.cmd_init:
             cmd = user_in.split(self.cmd_init)[1].lower()
             if cmd in self.cmds:
-                if cmd == 'q':
+                if cmd == 'quit':
                     sys.exit()
                 elif cmd == 'help':
                     self.printCmds()
@@ -121,7 +121,7 @@ class GPTerminator:
         self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end='')
         self.console.print(f"[bright_black]System prompt: {self.sys_prmpt}[/]")
         self.console.print(f"[bright_black]Model: {self.model}[/]")
-        self.console.print(f"[bright_black]Type '{self.cmd_init}q' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n")
+        self.console.print(f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n")
 
     def run(self):
         self.loadConfig()
