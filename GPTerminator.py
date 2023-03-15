@@ -26,7 +26,7 @@ class GPTerminator:
                 "help": "prints a list of acceptable commands",
                 "regen": "requeries the last message",
                 "save": "saves the chat history",
-                "copy": "copies code block in last response",
+                "ccpy": "copies code block in last response",
                 }
         self.api_key = ''
         self.prompt_count = 0
@@ -112,7 +112,7 @@ class GPTerminator:
                         self.printError("can't regenenerate, there is no previous prompt")
                 elif cmd == 'save':
                     self.saveChat()
-                elif cmd == 'copy':
+                elif cmd == 'ccpy':
                     if self.prompt_count > 0:
                         self.copyCode()
                     else:
