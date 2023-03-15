@@ -74,7 +74,7 @@ class GPTerminator:
                     pyperclip.copy(code_block_list[0])
                 elif lst_len > 1:
                     for num, code_block in enumerate(code_block_list):
-                        self.console.log(Panel.fit(Markdown(code_block), title=f"Option {num + 1}"))
+                        self.console.log(Panel.fit(code_block, title=f"Option {num + 1}"))
                     while True:
                         self.console.print(f"[yellow]|!|[/][bold green] Which code block do you want [/bold green][bold gray]> [/bold gray]", end="")
                         try:
