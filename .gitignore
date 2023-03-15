@@ -3,4 +3,4 @@ apikey.txt
 *~
 saves/
 __pycache__/
-apienv.sh
+./apienv.sh
