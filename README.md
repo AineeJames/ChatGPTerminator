@@ -22,7 +22,7 @@ To use this terminal interface, follow these steps:
    pip install -r requirements.txt
    ```
 
-5. Set the OPENAI_API_KEY env variable
+5. Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
 
    ```
    export OPENAI_API_KEY=PUT_API_KEY_HERE
