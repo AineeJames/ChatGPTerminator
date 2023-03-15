@@ -131,7 +131,6 @@ class GPTerminator:
         self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
         self.printBanner()
         while True:
-            print(self.msg_hist)
             usr_input = self.queryUser()
             if usr_input is not None:
                 self.prompt_count += 1
