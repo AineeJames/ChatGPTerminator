@@ -1,6 +1,7 @@
 import openai
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.live import Live
 import os
 import json
 import sys
@@ -82,21 +83,27 @@ class GPTerminator:
 
     def getResponse(self, usr_prompt):
         self.msg_hist.append({'role': 'user', 'content': usr_prompt})
-        resp = openai.ChatCompletion.create(model=self.model, messages=self.msg_hist)
-        resp_content = resp['choices'][0]['message']['content']
-        self.msg_hist.append({"role": "assistant", "content": resp_content})
-        return resp_content
+        resp = openai.ChatCompletion.create(model=self.model, messages=self.msg_hist, stream=True)
+        collected_chunks = []
+        collected_messages = []
+        md = Markdown('')
+        self.console.rule(title="Response", align="left", style="bright_black")
+        with Live(md, console=self.console) as live:
+            for chunk in resp:
+                collected_chunks.append(chunk)  # save the event response
+                chunk_message = chunk['choices'][0]['delta']  # extract the message
+                collected_messages.append(chunk_message)  # save the message
+                full_reply_content = ''.join([m.get('content', '') for m in collected_messages])
+                md = Markdown(full_reply_content)
+                live.update(md)
+        self.console.rule(title=self.getTime(), align="right", style="bright_black")
+        self.console.print()
+        self.msg_hist.append({"role": "assistant", "content": full_reply_content})
 
     def getTime(self):
         now = datetime.now()
         current_time = now.strftime("%I:%M:%S %p")
         return current_time
-
-    def printResponse(self, txt):
-        self.console.rule(title="Response", align="left", style="bright_black")
-        self.console.print(Markdown(txt))
-        self.console.rule(title=self.getTime(), align="right", style="bright_black")
-        self.console.print()
 
     def setApiKey(self):
         self.api_key = os.getenv('OPENAI_API_KEY')
@@ -124,12 +131,11 @@ class GPTerminator:
         self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
         self.printBanner()
         while True:
+            print(self.msg_hist)
             usr_input = self.queryUser()
             if usr_input is not None:
                 self.prompt_count += 1
-                with self.console.status("Performing query...", spinner="bouncingBar"):
-                    resp = self.getResponse(usr_input)
-                self.printResponse(resp)
+                self.getResponse(usr_input)
 
 if __name__ == "__main__":
     app = GPTerminator()
