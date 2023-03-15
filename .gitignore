@@ -1,5 +1,6 @@
 venv/
 apikey.txt
 *~
-chatlog/
+saves/
 __pycache__/
+apienv.sh
