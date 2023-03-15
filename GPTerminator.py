@@ -1,6 +1,8 @@
 import openai
+import tiktoken
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.panel import Panel
 from rich.live import Live
 import os
 import json
@@ -9,6 +11,8 @@ import configparser
 from prompt_toolkit import prompt
 from datetime import datetime
 from pathlib import Path
+import pyperclip
+import inquirer
 
 class GPTerminator:
     def __init__(self):
@@ -22,6 +26,7 @@ class GPTerminator:
                 "help": "prints a list of acceptable commands",
                 "regen": "requeries the last message",
                 "save": "saves the chat history",
+                "copy": "copies code block in last response",
                 }
         self.api_key = ''
         self.prompt_count = 0
@@ -48,11 +53,41 @@ class GPTerminator:
         if self.prompt_count == 0:
             self.printError("cant save an empty discussion")
         else:
-            self.console.print(f"[yellow]|!|[/][bold green]Name this chat: [/bold green][bold gray]> [/bold gray]", end="")
+            self.console.print(f"[yellow]|!|[/][bold green] Name this chat[/bold green][bold gray] > [/bold gray]", end="")
             user_in = prompt().strip()
             save_path = Path('.') / self.save_folder / f"{user_in}.json"
             with open(save_path, "w") as f:
                 json.dump(self.msg_hist, f, indent=4)
+
+    def copyCode(self):
+        last_resp = self.msg_hist[-1]['content']
+        code_block_list = []
+        index = 1
+        while True:
+            try: 
+                code_block = last_resp.split("```")[index]
+                code_block = "\n".join(code_block.split("\n")[1:])
+                code_block_list.append(code_block)
+            except:
+                lst_len = len(code_block_list)
+                if lst_len == 1:
+                    pyperclip.copy(code_block_list[0])
+                elif lst_len > 1:
+                    for num, code_block in enumerate(code_block_list):
+                        self.console.log(Panel.fit(Markdown(code_block), title=f"Option {num + 1}"))
+                    while True:
+                        self.console.print(f"[yellow]|!|[/][bold green] Which code block do you want [/bold green][bold gray]> [/bold gray]", end="")
+                        try:
+                            idx = int(input())
+                            if idx >= 1 and idx <= len(code_block_list):
+                                break
+                        except: pass
+                        self.printError("incorrect input, try again")
+                    pyperclip.copy(code_block_list[idx - 1])
+                else:
+                    self.printError("could not find code in previous response")
+                return
+            index += 2
 
     def queryUser(self):
         self.console.print(f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]", end="")
@@ -60,7 +95,8 @@ class GPTerminator:
         if user_in == '':
             self.printError("user input is empty")
         elif user_in[0] == self.cmd_init:
-            cmd = user_in.split(self.cmd_init)[1].lower()
+            raw_cmd = user_in.split(self.cmd_init)
+            cmd = raw_cmd[1].lower()
             if cmd in self.cmds:
                 if cmd == 'quit':
                     sys.exit()
@@ -76,6 +112,11 @@ class GPTerminator:
                         self.printError("can't regenenerate, there is no previous prompt")
                 elif cmd == 'save':
                     self.saveChat()
+                elif cmd == 'copy':
+                    if self.prompt_count > 0:
+                        self.copyCode()
+                    else:
+                        self.printError("can't copy, there is no previous response")
             else:
                 self.printError(f"{self.cmd_init}{cmd} in not in the list of commands")
         else:
@@ -88,7 +129,7 @@ class GPTerminator:
         collected_messages = []
         md = Markdown('')
         self.console.rule(title="Response", align="left", style="bright_black")
-        with Live(md, console=self.console) as live:
+        with Live(md, console=self.console, transient=True) as live:
             for chunk in resp:
                 collected_chunks.append(chunk)  # save the event response
                 chunk_message = chunk['choices'][0]['delta']  # extract the message
@@ -96,7 +137,10 @@ class GPTerminator:
                 full_reply_content = ''.join([m.get('content', '') for m in collected_messages])
                 md = Markdown(full_reply_content)
                 live.update(md)
-        self.console.rule(title=self.getTime(), align="right", style="bright_black")
+                encoding = tiktoken.encoding_for_model(self.model)
+                num_tokens = len(encoding.encode(full_reply_content))
+        self.console.print(md)
+        self.console.rule(title=f"TOKENS: {num_tokens} | {self.getTime()}", align="right", style="bright_black")
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content})
 
