@@ -31,6 +31,7 @@ class GPTerminator:
             "save": "saves the chat history",
             "ccpy": "copies code blocks from the last response",
             "pconf": "prints out the users current config file",
+            "load": "loads a previosly saved chatlog",
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -61,7 +62,7 @@ class GPTerminator:
             self.printError("cant save an empty discussion")
         else:
             self.console.print(
-                f"[yellow]|!|[/][bold green] Name this chat[/bold green][bold gray] > [/bold gray]",
+                f"[yellow]|{self.cmd_init}|[/][bold green] Name this chat[/bold green][bold gray] > [/bold gray]",
                 end="",
             )
             user_in = prompt().strip()
@@ -89,7 +90,7 @@ class GPTerminator:
                         )
                     while True:
                         self.console.print(
-                            f"[yellow]|!|[/][bold green] Which code block do you want [/bold green][bold gray]> [/bold gray]",
+                            f"[yellow]|{self.cmd_init}|[/][bold green] Which code block do you want [/bold green][bold gray]> [/bold gray]",
                             end="",
                         )
                         try:
@@ -112,6 +113,50 @@ class GPTerminator:
         for setting in config[self.config_selected]:
             self.console.print(f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]")
              
+    def loadChatlog(self):
+        self.console.print("[bold bright_black]Available saves:[/]")
+        file_dict = {}
+        for idx, file_name in enumerate(os.listdir(Path(".") / f"{self.save_folder}")):
+            file_str = file_name.split(".")[0]
+            file_dict[idx + 1] = file_str 
+            self.console.print(f"[bold bright_black]({idx + 1}) > [/][red]{file_str}[/]")
+        if len(file_dict) == 0:
+            self.printError("you have no saved chats")
+            return
+        while True:
+            self.console.print(f"[yellow]|{self.cmd_init}|[/][bold green] Select a file to load [/bold green][bold gray]> [/bold gray]", end="")
+            selection = input()
+            if selection.isdigit() == True and int(selection) in file_dict:
+                break
+            else:
+                self.printError(f"{selection} is not a valid selection")
+        with open(Path(".") / f"{self.save_folder}" / f"{file_dict[int(selection)]}.json", 'r') as f:
+            save = json.load(f)
+        self.prompt_count = 0
+        self.msg_hist = save
+        for msg in save:
+            match msg["role"]:
+                case "system":
+                    pass
+                case "user":
+                    self.console.print(
+                        f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
+                        end="",
+                    )
+                    self.console.print(msg["content"])
+                    self.prompt_count += 1
+                case "assistant":
+                    encoding = tiktoken.encoding_for_model(self.model)
+                    num_tokens = len(encoding.encode(msg["content"]))
+                    self.console.print(Markdown(msg["content"]))
+                    self.console.rule(
+                        title=f"TOKENS: {num_tokens}",
+                        align="right",
+                        style="bright_black",
+                    )
+                    self.console.print()
+            #update chat num
+            #print msg with correct formatting
 
     def queryUser(self):
         self.console.print(
@@ -148,6 +193,8 @@ class GPTerminator:
                         self.printError("can't copy, there is no previous response")
                 elif cmd == "pconf":
                     self.printConfig()
+                elif cmd == "load":
+                    self.loadChatlog()
             else:
                 self.printError(f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help")
         else:
