@@ -14,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 import pyperclip
 
+
 class GPTerminator:
     def __init__(self):
         self.config_selected = "BASE_CONFIG"
@@ -111,26 +112,35 @@ class GPTerminator:
         config.read("config.ini")
         self.console.print("[bold bright_black]Setting: value")
         for setting in config[self.config_selected]:
-            self.console.print(f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]")
-             
+            self.console.print(
+                f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]"
+            )
+
     def loadChatlog(self):
         self.console.print("[bold bright_black]Available saves:[/]")
         file_dict = {}
         for idx, file_name in enumerate(os.listdir(Path(".") / f"{self.save_folder}")):
             file_str = file_name.split(".")[0]
-            file_dict[idx + 1] = file_str 
-            self.console.print(f"[bold bright_black]({idx + 1}) > [/][red]{file_str}[/]")
+            file_dict[idx + 1] = file_str
+            self.console.print(
+                f"[bold bright_black]({idx + 1}) > [/][red]{file_str}[/]"
+            )
         if len(file_dict) == 0:
             self.printError("you have no saved chats")
             return
         while True:
-            self.console.print(f"[yellow]|{self.cmd_init}|[/][bold green] Select a file to load [/bold green][bold gray]> [/bold gray]", end="")
+            self.console.print(
+                f"[yellow]|{self.cmd_init}|[/][bold green] Select a file to load [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
             selection = input()
             if selection.isdigit() == True and int(selection) in file_dict:
                 break
             else:
                 self.printError(f"{selection} is not a valid selection")
-        with open(Path(".") / f"{self.save_folder}" / f"{file_dict[int(selection)]}.json", 'r') as f:
+        with open(
+            Path(".") / f"{self.save_folder}" / f"{file_dict[int(selection)]}.json", "r"
+        ) as f:
             save = json.load(f)
         self.prompt_count = 0
         self.msg_hist = save
@@ -160,8 +170,8 @@ class GPTerminator:
                         style="bright_black",
                     )
                     self.console.print()
-            #update chat num
-            #print msg with correct formatting
+            # update chat num
+            # print msg with correct formatting
 
     def queryUser(self):
         self.console.print(
@@ -201,7 +211,9 @@ class GPTerminator:
                 elif cmd == "load":
                     self.loadChatlog()
             else:
-                self.printError(f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help")
+                self.printError(
+                    f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
+                )
         else:
             return user_in
 
@@ -209,12 +221,12 @@ class GPTerminator:
         self.msg_hist.append({"role": "user", "content": usr_prompt})
         try:
             resp = openai.ChatCompletion.create(
-                model = self.model,
-                messages = self.msg_hist,
-                stream = True,
-                temperature = int(self.temperature),
-                presence_penalty = int(self.presence_penalty),
-                frequency_penalty = int(self.frequency_penalty),
+                model=self.model,
+                messages=self.msg_hist,
+                stream=True,
+                temperature=int(self.temperature),
+                presence_penalty=int(self.presence_penalty),
+                frequency_penalty=int(self.frequency_penalty),
             )
         except error.Timeout as e:
             self.printError(f"OpenAI API request timed out: {e}")
