@@ -148,6 +148,11 @@ class GPTerminator:
                 case "assistant":
                     encoding = tiktoken.encoding_for_model(self.model)
                     num_tokens = len(encoding.encode(msg["content"]))
+                    self.console.rule(
+                        title=f"Response:",
+                        align="left",
+                        style="bright_black",
+                    )
                     self.console.print(Markdown(msg["content"]))
                     self.console.rule(
                         title=f"TOKENS: {num_tokens}",
