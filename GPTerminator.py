@@ -14,10 +14,9 @@ from datetime import datetime
 from pathlib import Path
 import pyperclip
 
-
 class GPTerminator:
     def __init__(self):
-        self.config_selected = "BASE_CONFIG"
+        self.config_selected = ""
         self.model = ""
         self.temperature = ""
         self.presence_penalty = ""
@@ -33,6 +32,7 @@ class GPTerminator:
             "ccpy": "copies code blocks from the last response",
             "pconf": "prints out the users current config file",
             "load": "loads a previosly saved chatlog",
+            "setconf": "switches to a new config",
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -42,6 +42,7 @@ class GPTerminator:
     def loadConfig(self):
         config = configparser.ConfigParser()
         config.read("config.ini")
+        self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
         self.model = config[self.config_selected]["ModelName"]
         self.sys_prmpt = config[self.config_selected]["SystemMessage"]
         self.cmd_init = config[self.config_selected]["CommandInitiator"]
@@ -170,8 +171,32 @@ class GPTerminator:
                         style="bright_black",
                     )
                     self.console.print()
-            # update chat num
-            # print msg with correct formatting
+
+    def setConfig(self):
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        config_dict = {}
+        config_num = 1
+        for section in config:
+            if str(section) != "DEFAULT" and str(section) != "SELECTED_CONFIG":
+                config_dict[config_num] = str(section)
+                self.console.print(f"[bright_black]({config_num}) > [/][red]{str(section)}[/]")
+                config_num += 1
+        while True:
+            self.console.print(
+                f"[yellow]|{self.cmd_init}|[/][bold green] Select which config you want [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
+            sel_config = input()
+            if sel_config.isdigit() == True and int(sel_config) in config_dict:
+                break
+            else:
+                self.printError("invalid selection, please try again")
+        config["SELECTED_CONFIG"]["ConfigName"] = f"{config_dict[int(sel_config)]}"
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
+        self.loadConfig()
+        self.printConfig()
 
     def queryUser(self):
         self.console.print(
@@ -210,6 +235,8 @@ class GPTerminator:
                     self.printConfig()
                 elif cmd == "load":
                     self.loadChatlog()
+                elif cmd == "setconf":
+                    self.setConfig()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
@@ -224,9 +251,9 @@ class GPTerminator:
                 model=self.model,
                 messages=self.msg_hist,
                 stream=True,
-                temperature=int(self.temperature),
-                presence_penalty=int(self.presence_penalty),
-                frequency_penalty=int(self.frequency_penalty),
+                temperature=float(self.temperature),
+                presence_penalty=float(self.presence_penalty),
+                frequency_penalty=float(self.frequency_penalty),
             )
         except error.Timeout as e:
             self.printError(f"OpenAI API request timed out: {e}")
