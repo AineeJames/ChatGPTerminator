@@ -62,7 +62,7 @@ Currently, a couple basic configuration settings are available for GPTerminal.
 - **CommandInitiator:** this can be set to change the default !<cmd> structure
 - **SaveFolder:** this changes the location of the save folder when running !save
 
-   __Note__: More details on some settings can be found !(here)[https://platform.openai.com/docs/api-reference/chat/create]
+   _Note_: More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
 
 ## Contributing :raised_hands:
 
