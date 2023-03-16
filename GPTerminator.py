@@ -27,7 +27,7 @@ class GPTerminator:
                 "help": "prints a list of acceptable commands",
                 "regen": "requeries the last message",
                 "save": "saves the chat history",
-                "ccpy": "copies code block in last response",
+                "ccpy": "copies code blocks from the last response",
                 }
         self.api_key = ''
         self.prompt_count = 0
