@@ -33,6 +33,7 @@ class GPTerminator:
             "pconf": "prints out the users current config file",
             "load": "loads a previosly saved chatlog",
             "setconf": "switches to a new config",
+            "cpyall": "copies all raw text from the previous response",
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -198,6 +199,15 @@ class GPTerminator:
         self.loadConfig()
         self.printConfig()
 
+    def copyAll(self):
+        if self.prompt_count == 0:
+            self.printError("cannot run cpyall when there are no responses")
+            return
+        last_resp = self.msg_hist[-1]["content"]
+        pyperclip.copy(last_resp)
+        self.console.print(f"[bright_black]Copied text to keyboard...[/]")
+
+
     def queryUser(self):
         self.console.print(
             f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -237,6 +247,8 @@ class GPTerminator:
                     self.loadChatlog()
                 elif cmd == "setconf":
                     self.setConfig()
+                elif cmd == "cpyall":
+                    self.copyAll()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
