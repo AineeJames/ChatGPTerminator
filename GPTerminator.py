@@ -1,4 +1,5 @@
 import openai
+from openai import error
 import tiktoken
 from rich.console import Console
 from rich.markdown import Markdown
@@ -124,7 +125,30 @@ class GPTerminator:
 
     def getResponse(self, usr_prompt):
         self.msg_hist.append({'role': 'user', 'content': usr_prompt})
-        resp = openai.ChatCompletion.create(model=self.model, messages=self.msg_hist, stream=True)
+        try:
+            resp = openai.ChatCompletion.create(model=self.model, messages=self.msg_hist, stream=True)
+        except error.Timeout as e:
+            self.printError(f"OpenAI API request timed out: {e}")
+            sys.exit()
+        except error.APIError as e:
+            self.printError(f"OpenAI API returned an API Error: {e}")
+            sys.exit()
+        except error.APIConnectionError as e:
+            self.printError(f"OpenAI API request failed to connect: {e}")
+            sys.exit()
+        except error.InvalidRequestError as e:
+            self.printError(f"OpenAI API request was invalid: {e}")
+            sys.exit()
+        except error.AuthenticationError as e:
+            self.printError(f"OpenAI API request was not authorized: {e}")
+            sys.exit()
+        except error.PermissionError as e:
+            self.printError(f"OpenAI API request was not permitted: {e}")
+            sys.exit()
+        except error.RateLimitError as e:
+            self.printError(f"OpenAI API request exceeded rate limit: {e}")
+            sys.exit()
+
         collected_chunks = []
         collected_messages = []
         md = Markdown('')
