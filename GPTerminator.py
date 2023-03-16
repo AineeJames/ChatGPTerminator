@@ -123,7 +123,7 @@ class GPTerminator:
             self.printError("user input is empty")
         elif user_in[0] == self.cmd_init:
             raw_cmd = user_in.split(self.cmd_init)
-            cmd = raw_cmd[1].lower()
+            cmd = raw_cmd[1].lower().split()[0]
             if cmd in self.cmds:
                 if cmd == "quit":
                     sys.exit()
@@ -149,7 +149,7 @@ class GPTerminator:
                 elif cmd == "pconf":
                     self.printConfig()
             else:
-                self.printError(f"{self.cmd_init}{cmd} in not in the list of commands")
+                self.printError(f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help")
         else:
             return user_in
 
