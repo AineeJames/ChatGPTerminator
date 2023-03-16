@@ -41,17 +41,17 @@ To use this terminal interface, follow these steps:
 
 ## Configuration
 
-Currently, a couple basic configuration settings are available for GPTerminal.
+GPTerminator is configurable and can support multiple configurations. Add the following to your config.ini:
 
    ```ini
-   [BASE_CONFIG]
-   ModelName = gpt-3.5-turbo
-   SystemMessage = You are a helpful assistant named GPTerminator.
-   Temperature = 1
-   PresencePenalty = 0
-   FrequencyPenalty = 0
-   CommandInitiator = !
-   SaveFolder = saves
+   [CONFIG_TEMPLATE]
+   ModelName = 
+   SystemMessage = 
+   Temperature =
+   PresencePenalty = 
+   FrequencyPenalty = 
+   CommandInitiator = 
+   SaveFolder = 
    ```
 
 - **ModelName:** this is the model used when chatting
@@ -63,6 +63,14 @@ Currently, a couple basic configuration settings are available for GPTerminal.
 - **SaveFolder:** this changes the location of the save folder when running !save
 
    _Note_: More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
+
+After saving the config file, run:
+   ```zsh
+   python GPTerminator
+   ```
+Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
+_Note_: If you change the CommandInitiator, you will now type <CommandInitiator><cmd> to execute commands...
+
 
 ## Contributing :raised_hands:
 
