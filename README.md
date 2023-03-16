@@ -69,6 +69,7 @@ After saving the config file, run:
    python GPTerminator
    ```
 Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
+
 _Note_: If you change the CommandInitiator, you will now type <CommandInitiator><cmd> to execute commands...
 
 
