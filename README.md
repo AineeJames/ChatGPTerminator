@@ -46,15 +46,23 @@ Currently, a couple basic configuration settings are available for GPTerminal.
    ```ini
    [BASE_CONFIG]
    ModelName = gpt-3.5-turbo
-   SystemMessage = You are a helpful assistant.
+   SystemMessage = You are a helpful assistant named GPTerminator.
+   Temperature = 1
+   PresencePenalty = 0
+   FrequencyPenalty = 0
    CommandInitiator = !
    SaveFolder = saves
    ```
 
 - **ModelName:** this is the model used when chatting
+- **Temperature** = between 0 and 2
+- **PresencePenalty** = between -2 and 2
+- **FrequencyPenalty** = between -2 and 2
 - **SystemMessage:** this is the starting system message sent to the API
 - **CommandInitiator:** this can be set to change the default !<cmd> structure
 - **SaveFolder:** this changes the location of the save folder when running !save
+
+   __Note__: More details on some settings can be found !(here)[https://platform.openai.com/docs/api-reference/chat/create]
 
 ## Contributing :raised_hands:
 

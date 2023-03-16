@@ -18,6 +18,9 @@ class GPTerminator:
     def __init__(self):
         self.config_selected = "BASE_CONFIG"
         self.model = ""
+        self.temperature = ""
+        self.presence_penalty = ""
+        self.frequency_penalty = ""
         self.sys_prmpt = ""
         self.msg_hist = []
         self.cmd_init = ""
@@ -27,6 +30,7 @@ class GPTerminator:
             "regen": "requeries the last message",
             "save": "saves the chat history",
             "ccpy": "copies code blocks from the last response",
+            "pconf": "prints out the users current config file",
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -40,6 +44,9 @@ class GPTerminator:
         self.sys_prmpt = config[self.config_selected]["SystemMessage"]
         self.cmd_init = config[self.config_selected]["CommandInitiator"]
         self.save_folder = config[self.config_selected]["SaveFolder"]
+        self.temperature = config[self.config_selected]["Temperature"]
+        self.presence_penalty = config[self.config_selected]["PresencePenalty"]
+        self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
 
     def printError(self, msg):
         self.console.print(f"[bold red]ERROR: [/]{msg}")
@@ -98,6 +105,14 @@ class GPTerminator:
                 return
             index += 2
 
+    def printConfig(self):
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+        self.console.print("[bold bright_black]Setting: value")
+        for setting in config[self.config_selected]:
+            self.console.print(f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]")
+             
+
     def queryUser(self):
         self.console.print(
             f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -131,6 +146,8 @@ class GPTerminator:
                         self.copyCode()
                     else:
                         self.printError("can't copy, there is no previous response")
+                elif cmd == "pconf":
+                    self.printConfig()
             else:
                 self.printError(f"{self.cmd_init}{cmd} in not in the list of commands")
         else:
@@ -140,7 +157,12 @@ class GPTerminator:
         self.msg_hist.append({"role": "user", "content": usr_prompt})
         try:
             resp = openai.ChatCompletion.create(
-                model=self.model, messages=self.msg_hist, stream=True
+                model = self.model,
+                messages = self.msg_hist,
+                stream = True,
+                temperature = int(self.temperature),
+                presence_penalty = int(self.presence_penalty),
+                frequency_penalty = int(self.frequency_penalty),
             )
         except error.Timeout as e:
             self.printError(f"OpenAI API request timed out: {e}")
