@@ -93,4 +93,4 @@ We welcome contributions to this project. If you find a bug, have a feature requ
 
 ## Disclaimer :warning: 
 
-This program uses the openai API to chat and generate images using dalle. It is a good idea to put a usage cap on your billing, just in case something goes wrong.
+This program uses the openai API to chat and generate images using dalle. It is a good idea to put a usage cap on your billing, just in case something goes wrong!
