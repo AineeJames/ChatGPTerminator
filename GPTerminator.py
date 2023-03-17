@@ -5,6 +5,7 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.live import Live
+from rich.status import Status
 import os
 import json
 import sys
@@ -34,6 +35,7 @@ class GPTerminator:
             "load": "loads a previosly saved chatlog",
             "setconf": "switches to a new config",
             "cpyall": "copies all raw text from the previous response",
+            "dalle": "generates images and puts them in the SaveFolder loacation"
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -207,6 +209,29 @@ class GPTerminator:
         pyperclip.copy(last_resp)
         self.console.print(f"[bright_black]Copied text to keyboard...[/]")
 
+    def useDalle(self):
+        while True:
+            self.console.print(
+                f"[yellow]|{self.prompt_count}|[/][bold green] Image Prompt [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
+            user_in = prompt()
+            if len(user_in) > 10:
+                break
+            else:
+                self.printError("the image prompt should be at least 10 characters")
+        with self.console.status("", spinner="bouncingBar", spinner_style="bold red") as status:
+            status.update(status="[bright_black]Generating image...[/]")
+            img_response = openai.Image.create(
+                prompt=user_in,
+                n=1,
+                size="1024x1024"
+            )
+        image_url = img_response['data'][0]['url']
+        self.console.print(f"[bold green]Link: [/][bright_black]{image_url}[/]")
+        pyperclip.copy(image_url)
+        self.console.print(f"[bright_black]Image link copied to clipboard![/]")
+
 
     def queryUser(self):
         self.console.print(
@@ -249,6 +274,8 @@ class GPTerminator:
                     self.setConfig()
                 elif cmd == "cpyall":
                     self.copyAll()
+                elif cmd == "dalle":
+                    self.useDalle()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
