@@ -38,6 +38,20 @@ To use this terminal interface, follow these steps:
 
 8. Type !help for a list of commands to use
 
+## Call From Anywhere
+
+In order you call the script from anywhere, you can alter your .rc file by adding a function:
+
+   ```zsh
+   ask () {
+       cd path/to/ChatGPTerminator
+       source venv/bin/activate
+       python GPTerminator.py
+       deactivate
+       cd $OLDPWD
+   }
+   ```
+
 
 ## Configuration
 
