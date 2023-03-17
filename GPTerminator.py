@@ -35,7 +35,7 @@ class GPTerminator:
             "load": "loads a previosly saved chatlog",
             "setconf": "switches to a new config",
             "cpyall": "copies all raw text from the previous response",
-            "dalle": "generates images and puts them in the SaveFolder loacation"
+            "dalle": "generates images and provides a link for download"
         }
         self.api_key = ""
         self.prompt_count = 0
