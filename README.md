@@ -38,7 +38,7 @@ To use this terminal interface, follow these steps:
 
 8. Type !help for a list of commands to use
 
-## Call From Anywhere
+## Call From Anywhere :globe_with_meridians: 
 
 In order you call the script from anywhere, you can alter your .rc file by adding a function:
 
@@ -53,7 +53,7 @@ In order you call the script from anywhere, you can alter your .rc file by addin
    ```
 
 
-## Configuration
+## Configuration :gear:
 
 GPTerminator is configurable and can support multiple configurations. Add the following to your config.ini:
 
@@ -90,3 +90,7 @@ _Note_: If you change the CommandInitiator, you will now type <CommandInitiator>
 ## Contributing :raised_hands:
 
 We welcome contributions to this project. If you find a bug, have a feature request, or want to contribute code, please open an issue or submit a pull request.
+
+## Disclaimer :warning: 
+
+This program uses the openai API to chat and generate images using dalle. It is a good idea to put a usage cap on your billing, just in case something goes wrong.
