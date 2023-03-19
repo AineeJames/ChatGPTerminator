@@ -2,15 +2,18 @@
 
 
 <p align="center">
-   <img src="./imgs/cmd_example.png" width="400" />
+   <img src="./imgs/cmd_example.png" width="600" />
 </p>
+
+
+<p align="center">This terminal interface provides a convenient way to interact with ChatGPT using your command line interface.</p>
+
+
 <p align="center">
    <img src="https://img.shields.io/github/last-commit/AineeJames/ChatGPTerminator?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=302D41" />
    <img src="https://img.shields.io/github/stars/AineeJames/ChatGPTerminator?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=302D41" />
 </p>
 
-
-This terminal interface provides a convenient way to interact with ChatGPT using your command line interface.
 
 ## Getting Started :rocket:
 
