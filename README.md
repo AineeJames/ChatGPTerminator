@@ -59,9 +59,8 @@ In order you call the script from anywhere, you can alter your .rc file by addin
    ```
 
 </details>
+<details><summary><h2>Configuration :gear:</h2></summary>
 
-
-## Configuration :gear:
 
 GPTerminator is configurable and can support multiple configurations. Add the following to your config.ini:
 
@@ -93,6 +92,9 @@ After saving the config file, run:
 Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
 
 _Note_: If you change the CommandInitiator, you will now type <CommandInitiator><cmd> to execute commands...
+
+
+</details>
 
 
 ## Contributing :raised_hands:
