@@ -36,7 +36,7 @@ To use this terminal interface, follow these steps:
 6. Run the following command to start the ChatGPT terminal interface:
 
    ```
-   python GPTerminal.py
+   python GPTerminator.py
    ```
 
 7. You can now start chatting. Type a message and press Enter to get a response.
