@@ -71,10 +71,12 @@ class GPTerminator:
                 f"[yellow]|{self.cmd_init}|[/][bold green] Name this chat[/bold green][bold gray] > [/bold gray]",
                 end="",
             )
-            user_in = prompt().strip()
+            user_in = prompt().strip().replace(" ", "_")
             save_path = Path(".") / self.save_folder / f"{user_in}.json"
             with open(save_path, "w") as f:
                 json.dump(self.msg_hist, f, indent=4)
+            self.console.print(f"[bright_black]Saved file as {user_in}.json[/]")
+
 
     def copyCode(self):
         last_resp = self.msg_hist[-1]["content"]
