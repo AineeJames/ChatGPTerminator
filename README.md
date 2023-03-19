@@ -1,6 +1,6 @@
 # GPTerminal - A ChatGPT Terminal Interface :robot:
 
-![Screenshot of GPTerminal](./imgs/new_example.png)
+![Screenshot of GPTerminal](./imgs/cmd_example.png)
 
 
 <p align="center">
