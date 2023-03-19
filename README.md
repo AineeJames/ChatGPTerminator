@@ -43,7 +43,8 @@ To use this terminal interface, follow these steps:
 
 8. Type !help for a list of commands to use
 
-## Call From Anywhere :globe_with_meridians: 
+<details><summary><h2>Call From Anywhere :globe_with_meridians:</h2></summary>
+
 
 In order you call the script from anywhere, you can alter your .rc file by adding a function:
 
@@ -56,6 +57,8 @@ In order you call the script from anywhere, you can alter your .rc file by addin
        cd $OLDPWD
    }
    ```
+
+</details>
 
 
 ## Configuration :gear:
