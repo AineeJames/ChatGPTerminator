@@ -1,9 +1,9 @@
 # GPTerminal - A ChatGPT Terminal Interface :robot:
 
 
-<img src="./imgs/cmd_example.png" width="400" />
-
-
+<p align="center">
+   <img src="./imgs/cmd_example.png" width="400" />
+</p>
 <p align="center">
    <img src="https://img.shields.io/github/last-commit/AineeJames/ChatGPTerminator?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=302D41" />
    <img src="https://img.shields.io/github/stars/AineeJames/ChatGPTerminator?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=302D41" />
