@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 import pyperclip
 
+
 class GPTerminator:
     def __init__(self):
         self.config_selected = ""
@@ -35,7 +36,7 @@ class GPTerminator:
             "load": "loads a previosly saved chatlog",
             "setconf": "switches to a new config",
             "cpyall": "copies all raw text from the previous response",
-            "dalle": "generates images and provides a link for download"
+            "dalle": "generates images and provides a link for download",
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -177,13 +178,15 @@ class GPTerminator:
 
     def setConfig(self):
         config = configparser.ConfigParser()
-        config.read('config.ini')
+        config.read("config.ini")
         config_dict = {}
         config_num = 1
         for section in config:
             if str(section) != "DEFAULT" and str(section) != "SELECTED_CONFIG":
                 config_dict[config_num] = str(section)
-                self.console.print(f"[bright_black]({config_num}) > [/][red]{str(section)}[/]")
+                self.console.print(
+                    f"[bright_black]({config_num}) > [/][red]{str(section)}[/]"
+                )
                 config_num += 1
         while True:
             self.console.print(
@@ -196,7 +199,7 @@ class GPTerminator:
             else:
                 self.printError("invalid selection, please try again")
         config["SELECTED_CONFIG"]["ConfigName"] = f"{config_dict[int(sel_config)]}"
-        with open('config.ini', 'w') as configfile:
+        with open("config.ini", "w") as configfile:
             config.write(configfile)
         self.loadConfig()
         self.printConfig()
@@ -220,18 +223,15 @@ class GPTerminator:
                 break
             else:
                 self.printError("the image prompt should be at least 10 characters")
-        with self.console.status("", spinner="bouncingBar", spinner_style="bold red") as status:
+        with self.console.status(
+            "", spinner="bouncingBar", spinner_style="bold red"
+        ) as status:
             status.update(status="[bright_black]Generating image...[/]")
-            img_response = openai.Image.create(
-                prompt=user_in,
-                n=1,
-                size="1024x1024"
-            )
-        image_url = img_response['data'][0]['url']
+            img_response = openai.Image.create(prompt=user_in, n=1, size="1024x1024")
+        image_url = img_response["data"][0]["url"]
         self.console.print(f"[bold green]Link: [/][bright_black]{image_url}[/]")
         pyperclip.copy(image_url)
         self.console.print(f"[bright_black]Image link copied to clipboard![/]")
-
 
     def queryUser(self):
         self.console.print(
