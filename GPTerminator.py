@@ -11,9 +11,9 @@ import json
 import sys
 import configparser
 from prompt_toolkit import prompt
-from datetime import datetime
 from pathlib import Path
 import pyperclip
+import time
 
 
 class GPTerminator:
@@ -56,7 +56,7 @@ class GPTerminator:
         self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
 
     def printError(self, msg):
-        self.console.print(f"[bold red]ERROR: [/]{msg}")
+        self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
 
     def printCmds(self):
         self.console.print(f"[bold bright_black]Command : description[/]")
@@ -320,8 +320,12 @@ class GPTerminator:
 
         collected_chunks = []
         collected_messages = []
-        md = Markdown("")
-        self.console.rule(title="Response", align="left", style="bright_black")
+        subtitle_str = f"[bright_black]Tokens:[/] [bold red]{0}[/] | "
+        subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {0.0}s [/]"
+        md = Panel(Markdown(""), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+        
+        start_time = time.time()
+
         with Live(md, console=self.console, transient=True) as live:
             for chunk in resp:
                 collected_chunks.append(chunk)  # save the event response
@@ -330,23 +334,16 @@ class GPTerminator:
                 full_reply_content = "".join(
                     [m.get("content", "") for m in collected_messages]
                 )
-                md = Markdown(full_reply_content)
-                live.update(md)
                 encoding = tiktoken.encoding_for_model(self.model)
                 num_tokens = len(encoding.encode(full_reply_content))
+                time_elapsed_s = time.time() - start_time
+                subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
+                subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
+                md = Panel(Markdown(full_reply_content), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+                live.update(md)
         self.console.print(md)
-        self.console.rule(
-            title=f"TOKENS: {num_tokens} | {self.getTime()}",
-            align="right",
-            style="bright_black",
-        )
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content})
-
-    def getTime(self):
-        now = datetime.now()
-        current_time = now.strftime("%I:%M:%S %p")
-        return current_time
 
     def setApiKey(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
