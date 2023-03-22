@@ -41,7 +41,7 @@ class GPTerminator:
         }
         self.api_key = ""
         self.prompt_count = 0
-        self.save_folder = ""
+        self.save_path = ""
         self.console = Console()
 
     def getConfigPath(self):
@@ -63,7 +63,7 @@ class GPTerminator:
         self.model = config[self.config_selected]["ModelName"]
         self.sys_prmpt = config[self.config_selected]["SystemMessage"]
         self.cmd_init = config[self.config_selected]["CommandInitiator"]
-        self.save_folder = config[self.config_selected]["SaveFolder"]
+        self.save_path = config[self.config_selected]["SavePath"]
         self.temperature = config[self.config_selected]["Temperature"]
         self.presence_penalty = config[self.config_selected]["PresencePenalty"]
         self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
@@ -85,8 +85,7 @@ class GPTerminator:
                 end="",
             )
             user_in = prompt().strip().replace(" ", "_")
-            save_path = Path(".") / self.save_folder / f"{user_in}.json"
-            with open(save_path, "w") as f:
+            with open(Path(self.save_path) / f"{user_in}.json", "w") as f:
                 json.dump(self.msg_hist, f, indent=4)
             self.console.print(f"[bright_black]Saved file as {user_in}.json[/]")
 
@@ -139,7 +138,7 @@ class GPTerminator:
     def loadChatlog(self):
         self.console.print("[bold bright_black]Available saves:[/]")
         file_dict = {}
-        for idx, file_name in enumerate(os.listdir(Path(".") / f"{self.save_folder}")):
+        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
             file_str = file_name.split(".")[0]
             file_dict[idx + 1] = file_str
             self.console.print(
@@ -159,7 +158,7 @@ class GPTerminator:
             else:
                 self.printError(f"{selection} is not a valid selection")
         with open(
-            Path(".") / f"{self.save_folder}" / f"{file_dict[int(selection)]}.json", "r"
+            Path(f"{self.save_path}") / f"{file_dict[int(selection)]}.json", "r"
         ) as f:
             save = json.load(f)
         self.prompt_count = 0
@@ -380,8 +379,8 @@ class GPTerminator:
 
     def run(self):
         self.loadConfig()
-        if not os.path.exists(self.save_folder):
-            os.makedirs(self.save_folder)
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path)
         self.setApiKey()
         self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
         self.printBanner()
