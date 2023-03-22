@@ -18,6 +18,7 @@ import time
 
 class GPTerminator:
     def __init__(self):
+        self.config_path = ""
         self.config_selected = ""
         self.model = ""
         self.temperature = ""
@@ -40,17 +41,29 @@ class GPTerminator:
         }
         self.api_key = ""
         self.prompt_count = 0
-        self.save_folder = ""
+        self.save_path = ""
         self.console = Console()
 
+    def getConfigPath(self):
+        if 'APPDATA' in os.environ:
+            confighome = os.environ['APPDATA']
+        elif 'XDG_CONFIG_HOME' in os.environ:
+            confighome = os.environ['XDG_CONFIG_HOME']
+        else:
+            confighome = os.path.join(os.environ['HOME'], '.config')
+        configpath = os.path.join(confighome, 'gpterminator', 'config.ini')
+        self.config_path = configpath
+
+
     def loadConfig(self):
+        self.getConfigPath();
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read(self.config_path)
         self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
         self.model = config[self.config_selected]["ModelName"]
         self.sys_prmpt = config[self.config_selected]["SystemMessage"]
         self.cmd_init = config[self.config_selected]["CommandInitiator"]
-        self.save_folder = config[self.config_selected]["SaveFolder"]
+        self.save_path = config[self.config_selected]["SavePath"]
         self.temperature = config[self.config_selected]["Temperature"]
         self.presence_penalty = config[self.config_selected]["PresencePenalty"]
         self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
@@ -72,8 +85,7 @@ class GPTerminator:
                 end="",
             )
             user_in = prompt().strip().replace(" ", "_")
-            save_path = Path(".") / self.save_folder / f"{user_in}.json"
-            with open(save_path, "w") as f:
+            with open(Path(self.save_path) / f"{user_in}.json", "w") as f:
                 json.dump(self.msg_hist, f, indent=4)
             self.console.print(f"[bright_black]Saved file as {user_in}.json[/]")
 
@@ -116,7 +128,7 @@ class GPTerminator:
 
     def printConfig(self):
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read(self.config_path)
         self.console.print("[bold bright_black]Setting: value")
         for setting in config[self.config_selected]:
             self.console.print(
@@ -126,7 +138,7 @@ class GPTerminator:
     def loadChatlog(self):
         self.console.print("[bold bright_black]Available saves:[/]")
         file_dict = {}
-        for idx, file_name in enumerate(os.listdir(Path(".") / f"{self.save_folder}")):
+        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
             file_str = file_name.split(".")[0]
             file_dict[idx + 1] = file_str
             self.console.print(
@@ -146,7 +158,7 @@ class GPTerminator:
             else:
                 self.printError(f"{selection} is not a valid selection")
         with open(
-            Path(".") / f"{self.save_folder}" / f"{file_dict[int(selection)]}.json", "r"
+            Path(f"{self.save_path}") / f"{file_dict[int(selection)]}.json", "r"
         ) as f:
             save = json.load(f)
         self.prompt_count = 0
@@ -164,23 +176,15 @@ class GPTerminator:
                     self.prompt_count += 1
                 case "assistant":
                     encoding = tiktoken.encoding_for_model(self.model)
-                    num_tokens = len(encoding.encode(msg["content"]))
-                    self.console.rule(
-                        title=f"Response:",
-                        align="left",
-                        style="bright_black",
-                    )
-                    self.console.print(Markdown(msg["content"]))
-                    self.console.rule(
-                        title=f"TOKENS: {num_tokens}",
-                        align="right",
-                        style="bright_black",
-                    )
+                    num_tokens = len(encoding.encode(msg['content']))
+                    subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
+                    md = Panel(Markdown(msg['content']), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+                    self.console.print(md)
                     self.console.print()
 
     def setConfig(self):
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read(self.config_path)
         config_dict = {}
         config_num = 1
         for section in config:
@@ -201,7 +205,7 @@ class GPTerminator:
             else:
                 self.printError("invalid selection, please try again")
         config["SELECTED_CONFIG"]["ConfigName"] = f"{config_dict[int(sel_config)]}"
-        with open("config.ini", "w") as configfile:
+        with open(self.config_path, "w") as configfile:
             config.write(configfile)
         self.loadConfig()
         self.printConfig()
@@ -367,8 +371,8 @@ class GPTerminator:
 
     def run(self):
         self.loadConfig()
-        if not os.path.exists(self.save_folder):
-            os.makedirs(self.save_folder)
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path)
         self.setApiKey()
         self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
         self.printBanner()
@@ -377,8 +381,3 @@ class GPTerminator:
             if usr_input is not None:
                 self.prompt_count += 1
                 self.getResponse(usr_input)
-
-
-if __name__ == "__main__":
-    app = GPTerminator()
-    app.run()

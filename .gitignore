@@ -3,4 +3,10 @@ apikey.txt
 *~
 saves/
 __pycache__/
-./apienv.sh
+./a
+**/__pycache__
+build
+**.egg-info
+venv
+.DS_Store
+.ideapienv.sh

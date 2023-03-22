@@ -15,50 +15,28 @@ To use this terminal interface, follow these steps:
 
 1. Clone this repository to your local machine.
 2. Navigate to the cloned directory using your command line interface.
-3. Create a virtual environment by using the following command:
+3. Install GPTerminator by using the following command:
 
    ```
-   python3 -m venv venv
+   pip install .
    ```
 
-4. Install the pip requirements into the venv:
-
-   ```
-   pip install -r requirements.txt
-   ```
-
-5. Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
+4. Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
 
    ```
    export OPENAI_API_KEY=PUT_API_KEY_HERE
    ```
 
-6. Run the following command to start the ChatGPT terminal interface:
+5. Run the following command to start the ChatGPT terminal interface:
 
    ```
-   python GPTerminator.py
+   gpterm
    ```
 
 7. You can now start chatting. Type a message and press Enter to get a response.
 
 8. Type !help for a list of commands to use
 
-<details><summary><h2>Call From Anywhere :globe_with_meridians:</h2></summary>
-
-
-In order you call the script from anywhere, you can alter your .rc file by adding a function:
-
-   ```zsh
-   ask () {
-       cd path/to/ChatGPTerminator
-       source venv/bin/activate
-       python GPTerminator.py
-       deactivate
-       cd $OLDPWD
-   }
-   ```
-
-</details>
 <details><summary><h2>Configuration :gear:</h2></summary>
 
 
@@ -72,7 +50,7 @@ GPTerminator is configurable and can support multiple configurations. Add the fo
    PresencePenalty = 
    FrequencyPenalty = 
    CommandInitiator = 
-   SaveFolder = 
+   SavePath = 
    ```
 
 - **ModelName:** this is the model used when chatting
@@ -81,13 +59,13 @@ GPTerminator is configurable and can support multiple configurations. Add the fo
 - **FrequencyPenalty** = between -2 and 2
 - **SystemMessage:** this is the starting system message sent to the API
 - **CommandInitiator:** this can be set to change the default !<cmd> structure
-- **SaveFolder:** this changes the location of the save folder when running !save
+- **SavePath:** this changes the location of the save path when loading/saving
 
    _Note_: More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
 
 After saving the config file, run:
    ```zsh
-   python GPTerminator
+   gpterm
    ```
 Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
 
