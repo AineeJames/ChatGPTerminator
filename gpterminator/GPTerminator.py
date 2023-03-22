@@ -18,6 +18,7 @@ import time
 
 class GPTerminator:
     def __init__(self):
+        self.config_path = ""
         self.config_selected = ""
         self.model = ""
         self.temperature = ""
@@ -43,9 +44,21 @@ class GPTerminator:
         self.save_folder = ""
         self.console = Console()
 
+    def getConfigPath(self):
+        if 'APPDATA' in os.environ:
+            confighome = os.environ['APPDATA']
+        elif 'XDG_CONFIG_HOME' in os.environ:
+            confighome = os.environ['XDG_CONFIG_HOME']
+        else:
+            confighome = os.path.join(os.environ['HOME'], '.config')
+        configpath = os.path.join(confighome, 'gpterminator', 'config.ini')
+        self.config_path = configpath
+
+
     def loadConfig(self):
+        self.getConfigPath();
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read(self.config_path)
         self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
         self.model = config[self.config_selected]["ModelName"]
         self.sys_prmpt = config[self.config_selected]["SystemMessage"]
@@ -116,7 +129,7 @@ class GPTerminator:
 
     def printConfig(self):
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read(self.config_path)
         self.console.print("[bold bright_black]Setting: value")
         for setting in config[self.config_selected]:
             self.console.print(
@@ -180,7 +193,7 @@ class GPTerminator:
 
     def setConfig(self):
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read(self.config_path)
         config_dict = {}
         config_num = 1
         for section in config:
@@ -377,8 +390,3 @@ class GPTerminator:
             if usr_input is not None:
                 self.prompt_count += 1
                 self.getResponse(usr_input)
-
-
-if __name__ == "__main__":
-    app = GPTerminator()
-    app.run()
