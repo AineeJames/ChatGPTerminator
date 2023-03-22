@@ -12,13 +12,9 @@ else:
 configpath = os.path.join(confighome, 'gpterminator')
 if not os.path.exists(configpath):
     os.mkdir(configpath)
-print("CONFIG PATH")
-print(configpath)
 savespath = os.path.join(configpath, "saves")
 if not os.path.exists(savespath):
     os.mkdir(savespath)
-print("SAVES PATH")
-print(savespath)
 
 config = configparser.ConfigParser()
 config['SELECTED_CONFIG'] = {"configname": "BASE_CONFIG"}

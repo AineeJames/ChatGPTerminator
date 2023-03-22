@@ -19,10 +19,7 @@ jobs:
         build
         --user
     - name: Build the dist
-      run: >-
-        python 
-        setup.py
-        sdist
+      run: python setup.py sdist
     - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
