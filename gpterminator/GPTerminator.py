@@ -214,7 +214,7 @@ class GPTerminator:
             else:
                 self.printError("invalid selection, please try again")
         config["SELECTED_CONFIG"]["ConfigName"] = f"{config_dict[int(sel_config)]}"
-        with open("config.ini", "w") as configfile:
+        with open(self.config_path, "w") as configfile:
             config.write(configfile)
         self.loadConfig()
         self.printConfig()
