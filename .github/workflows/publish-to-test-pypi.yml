@@ -1,7 +1,5 @@
 name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
-
 on: push
-
 jobs:
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
@@ -19,7 +17,7 @@ jobs:
         build
         --user
     - name: Build the dist
-      run: python setup.py sdist
+      run: python setup.py sdist bdist_wheel
     - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
