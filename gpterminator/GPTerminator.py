@@ -176,18 +176,10 @@ class GPTerminator:
                     self.prompt_count += 1
                 case "assistant":
                     encoding = tiktoken.encoding_for_model(self.model)
-                    num_tokens = len(encoding.encode(msg["content"]))
-                    self.console.rule(
-                        title=f"Response:",
-                        align="left",
-                        style="bright_black",
-                    )
-                    self.console.print(Markdown(msg["content"]))
-                    self.console.rule(
-                        title=f"TOKENS: {num_tokens}",
-                        align="right",
-                        style="bright_black",
-                    )
+                    num_tokens = len(encoding.encode(msg['content']))
+                    subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
+                    md = Panel(Markdown(msg['content']), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+                    self.console.print(md)
                     self.console.print()
 
     def setConfig(self):
