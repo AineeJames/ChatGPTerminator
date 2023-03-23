@@ -80,8 +80,25 @@ _Note_: If you change the CommandInitiator, you will now type <CommandInitiator>
 
 ## Contributing :raised_hands:
 
+### Current Contributors:
+
+
+<a href="https://github.com/AineeJames/ChatGPTerminator/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=AineeJames/ChatGPTerminator" />
+</a>
+
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 We welcome contributions to this project. If you find a bug, have a feature request, or want to contribute code, please open an issue or submit a pull request.
 
 ## Disclaimer :warning: 
 
 This program uses the openai API to chat and generate images using dalle. It is a good idea to put a usage cap on your billing, just in case something goes wrong!
+
+
+<a href="https://github.com/AineeJames/ChatGPTerminator/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=AineeJames/ChatGPTerminator" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
