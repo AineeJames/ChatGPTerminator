@@ -21,9 +21,9 @@ To use this terminal interface, follow these steps:
 
 5. Run the following command to start the ChatGPT terminal interface: `gpterm`
 
-7. You can now start chatting. Type a message and press Enter to get a response.
+6. You can now start chatting. Type a message and press Enter to get a response.
 
-8. Type !help for a list of commands to use
+7. Type !help for a list of commands to use
 
 <details><summary><h2>Configuration :gear:</h2></summary>
 
@@ -49,7 +49,7 @@ GPTerminator is configurable and can support multiple configurations. Add the fo
 - **CommandInitiator:** this can be set to change the default !<cmd> structure
 - **SavePath:** this changes the location of the save path when loading/saving
 
-   _Note_: More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
+_Note_: More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
 
 After saving the config file, run: `gpterm`
 Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
