@@ -23,6 +23,22 @@ To use this terminal interface, follow these steps:
 
 5. Type !help for a list of commands to use
 
+## Running `GPTERM` with podman/docker 🏗️
+#### Build the image, provide `APIKEY`
+```bash
+podman build \ 
+	--build-arg APIKEY=$(cat ~/Documents/api_tokens/openai.gpt3.key) \ 
+	-t gpterm .
+```
+#### Run gpterm in container
+```bash
+podman run -it --rm --name gpterm gpterm 
+```
+#### Set alias for easy access
+```bash
+echo "alias gpterm='podman run -it --rm --name gpterm gpterm'" >> ~/.bashrc
+```
+
 ## Usage :bulb:
 
 
