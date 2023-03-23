@@ -26,7 +26,7 @@ To use this terminal interface, follow these steps:
 
 ## Configuration :gear:
 
-The config.ini directory resides in different locations dependent on your OS. In order to find the path, run GPTerminator and then type !pconf
+The config.ini directory resides in different locations dependent on your OS. In order to find the path, run GPTerminator and then type `!pconf`.
 
 GPTerminator is configurable and can support multiple configurations. Add the following to your config.ini:
 
