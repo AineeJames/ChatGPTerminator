@@ -129,6 +129,7 @@ class GPTerminator:
     def printConfig(self):
         config = configparser.ConfigParser()
         config.read(self.config_path)
+        self.console.print(f"[bold bright_black]Config Path: {self.config_path}")
         self.console.print("[bold bright_black]Setting: value")
         for setting in config[self.config_selected]:
             self.console.print(

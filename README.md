@@ -23,8 +23,10 @@ To use this terminal interface, follow these steps:
 
 5. Type !help for a list of commands to use
 
-<details><summary><h2>Configuration :gear:</h2></summary>
 
+## Configuration :gear:
+
+The config.ini directory resides in different locations dependent on your OS. In order to find the path, run GPTerminator and then type !pconf
 
 GPTerminator is configurable and can support multiple configurations. Add the following to your config.ini:
 
@@ -53,9 +55,6 @@ After saving the config file, run: `gpterm`
 Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
 
 _Note_: If you change the CommandInitiator, you will now type <CommandInitiator><cmd> to execute commands...
-
-
-</details>
 
 
 ## Contributing :raised_hands:
