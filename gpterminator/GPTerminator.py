@@ -165,23 +165,23 @@ class GPTerminator:
         self.prompt_count = 0
         self.msg_hist = save
         for msg in save:
-            match msg["role"]:
-                case "system":
-                    pass
-                case "user":
-                    self.console.print(
-                        f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
-                        end="",
-                    )
-                    self.console.print(msg["content"])
-                    self.prompt_count += 1
-                case "assistant":
-                    encoding = tiktoken.encoding_for_model(self.model)
-                    num_tokens = len(encoding.encode(msg['content']))
-                    subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
-                    md = Panel(Markdown(msg['content']), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
-                    self.console.print(md)
-                    self.console.print()
+            role = msg['role']
+            if role == "user":
+                self.console.print(
+                    f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
+                    end="",
+                )
+                self.console.print(msg["content"])
+                self.prompt_count += 1
+            elif role == "assistant":
+                encoding = tiktoken.encoding_for_model(self.model)
+                num_tokens = len(encoding.encode(msg['content']))
+                subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
+                md = Panel(Markdown(msg['content']), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+                self.console.print(md)
+                self.console.print()
+            else: 
+                pass
 
     def setConfig(self):
         config = configparser.ConfigParser()
