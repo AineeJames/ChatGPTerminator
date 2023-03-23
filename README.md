@@ -23,6 +23,13 @@ To use this terminal interface, follow these steps:
 
 5. Type !help for a list of commands to use
 
+## Usage :bulb:
+
+
+<p align="center">
+<img src="./imgs/demo.gif" width="500" />
+</p>
+
 
 ## Configuration :gear:
 
