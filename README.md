@@ -1,11 +1,11 @@
 <h1 align="center">GPTerminator :robot:</h1>
 <p align="center">
-   <img src="./imgs/cmd_example.png" width="600" />
+<img src="./imgs/cmd_example.png" width="600" />
 </p>
 <p align="center">This terminal interface provides a convenient way to interact with OpenAI's chat completion and image generation API's using your command line interface.</p>
 <p align="center">
-   <img src="https://img.shields.io/github/last-commit/AineeJames/ChatGPTerminator?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=302D41" />
-   <img src="https://img.shields.io/github/stars/AineeJames/ChatGPTerminator?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=302D41" />
+<img src="https://img.shields.io/github/last-commit/AineeJames/ChatGPTerminator?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=302D41" />
+<img src="https://img.shields.io/github/stars/AineeJames/ChatGPTerminator?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=302D41" />
 </p>
 
 
@@ -15,23 +15,11 @@ To use this terminal interface, follow these steps:
 
 1. Clone this repository to your local machine.
 2. Navigate to the cloned directory using your command line interface.
-3. Install GPTerminator by using the following command:
+3. Install GPTerminator by using the following command: `pip install .`
 
-   ```
-   pip install .
-   ```
+4. Set the OPENAI_API_KEY env variable (you may want this in your .rc file): `export OPENAI_API_KEY=PUT_API_KEY_HERE`
 
-4. Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
-
-   ```
-   export OPENAI_API_KEY=PUT_API_KEY_HERE
-   ```
-
-5. Run the following command to start the ChatGPT terminal interface:
-
-   ```
-   gpterm
-   ```
+5. Run the following command to start the ChatGPT terminal interface: `gpterm`
 
 7. You can now start chatting. Type a message and press Enter to get a response.
 
@@ -63,10 +51,7 @@ GPTerminator is configurable and can support multiple configurations. Add the fo
 
    _Note_: More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
 
-After saving the config file, run:
-   ```zsh
-   gpterm
-   ```
+After saving the config file, run: `gpterm`
 Then, type !setconf and select which config you wish to use, you can also run the !pconf commang to view the current config details.
 
 _Note_: If you change the CommandInitiator, you will now type <CommandInitiator><cmd> to execute commands...
