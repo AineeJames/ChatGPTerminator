@@ -1,6 +1,6 @@
 <h1 align="center">GPTerminator :robot:</h1>
 <p align="center">
-<img src="./imgs/cmd_example.png" width="600" />
+<img src="./imgs/panel_output.png" width="600" />
 </p>
 <p align="center">This terminal interface provides a convenient way to interact with OpenAI's chat completion and image generation API's using your command line interface.</p>
 <p align="center">
