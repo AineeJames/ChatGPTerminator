@@ -45,18 +45,17 @@ class GPTerminator:
         self.console = Console()
 
     def getConfigPath(self):
-        if 'APPDATA' in os.environ:
-            confighome = os.environ['APPDATA']
-        elif 'XDG_CONFIG_HOME' in os.environ:
-            confighome = os.environ['XDG_CONFIG_HOME']
+        if "APPDATA" in os.environ:
+            confighome = os.environ["APPDATA"]
+        elif "XDG_CONFIG_HOME" in os.environ:
+            confighome = os.environ["XDG_CONFIG_HOME"]
         else:
-            confighome = os.path.join(os.environ['HOME'], '.config')
-        configpath = os.path.join(confighome, 'gpterminator', 'config.ini')
+            confighome = os.path.join(os.environ["HOME"], ".config")
+        configpath = os.path.join(confighome, "gpterminator", "config.ini")
         self.config_path = configpath
 
-
     def loadConfig(self):
-        self.getConfigPath();
+        self.getConfigPath()
         config = configparser.ConfigParser()
         config.read(self.config_path)
         self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
@@ -88,7 +87,6 @@ class GPTerminator:
             with open(Path(self.save_path) / f"{user_in}.json", "w") as f:
                 json.dump(self.msg_hist, f, indent=4)
             self.console.print(f"[bright_black]Saved file as {user_in}.json[/]")
-
 
     def copyCode(self):
         last_resp = self.msg_hist[-1]["content"]
@@ -165,7 +163,7 @@ class GPTerminator:
         self.prompt_count = 0
         self.msg_hist = save
         for msg in save:
-            role = msg['role']
+            role = msg["role"]
             if role == "user":
                 self.console.print(
                     f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -175,12 +173,19 @@ class GPTerminator:
                 self.prompt_count += 1
             elif role == "assistant":
                 encoding = tiktoken.encoding_for_model(self.model)
-                num_tokens = len(encoding.encode(msg['content']))
+                num_tokens = len(encoding.encode(msg["content"]))
                 subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
-                md = Panel(Markdown(msg['content']), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+                md = Panel(
+                    Markdown(msg["content"]),
+                    border_style="bright_black",
+                    title="[bright_black]Assistant[/]",
+                    title_align="left",
+                    subtitle=subtitle_str,
+                    subtitle_align="right",
+                )
                 self.console.print(md)
                 self.console.print()
-            else: 
+            else:
                 pass
 
     def setConfig(self):
@@ -327,8 +332,15 @@ class GPTerminator:
         collected_messages = []
         subtitle_str = f"[bright_black]Tokens:[/] [bold red]{0}[/] | "
         subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {0.0}s [/]"
-        md = Panel(Markdown(""), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
-        
+        md = Panel(
+            Markdown(""),
+            border_style="bright_black",
+            title="[bright_black]Assistant[/]",
+            title_align="left",
+            subtitle=subtitle_str,
+            subtitle_align="right",
+        )
+
         start_time = time.time()
 
         with Live(md, console=self.console, transient=True) as live:
@@ -344,7 +356,14 @@ class GPTerminator:
                 time_elapsed_s = time.time() - start_time
                 subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
                 subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
-                md = Panel(Markdown(full_reply_content), border_style="bright_black", title="[bright_black]Assistant[/]", title_align="left", subtitle=subtitle_str, subtitle_align="right")
+                md = Panel(
+                    Markdown(full_reply_content),
+                    border_style="bright_black",
+                    title="[bright_black]Assistant[/]",
+                    title_align="left",
+                    subtitle=subtitle_str,
+                    subtitle_align="right",
+                )
                 live.update(md)
         self.console.print(md)
         self.console.print()
