@@ -26,9 +26,7 @@ To use this terminal interface, follow these steps:
 ## Usage :bulb:
 
 
-<p align="center">
 <img src="./imgs/demo.gif" width="500" />
-</p>
 
 
 ## Configuration :gear:
