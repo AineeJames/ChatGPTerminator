@@ -47,9 +47,9 @@ echo "alias gpterm='podman run -it --rm --name gpterm gpterm'" >> ~/.bashrc
 
 ## Commands :exclamation:
 
-Power up you chat experience with commands!
-By typing `!help` you can view all the possible commands along with a short desctiption.
-Please check out the [wiki](https://github.com/AineeJames/ChatGPTerminator/wiki/Commands) for more detailed help with commands!
+- Power up you chat experience with commands!
+- By typing `!help` you can view all the possible commands along with a short desctiption.
+- Please check out the [wiki](https://github.com/AineeJames/ChatGPTerminator/wiki/Commands) for more detailed help with commands!
 
 ## Configuration :gear:
 
