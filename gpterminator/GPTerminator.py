@@ -5,7 +5,6 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.live import Live
-from rich.status import Status
 import os
 import json
 import sys
@@ -14,7 +13,6 @@ from prompt_toolkit import prompt
 from pathlib import Path
 import pyperclip
 import time
-
 
 class GPTerminator:
     def __init__(self):
@@ -389,7 +387,51 @@ class GPTerminator:
             f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
         )
 
+    def checkDirs(self):
+
+        # get paths
+        if "APPDATA" in os.environ:
+            confighome = os.environ["APPDATA"]
+        elif "XDG_CONFIG_HOME" in os.environ:
+            confighome = os.environ["XDG_CONFIG_HOME"]
+        else:
+            confighome = os.path.join(os.environ["HOME"], ".config")
+        configpath = os.path.join(confighome, "gpterminator")
+        savespath = os.path.join(configpath, "saves")
+
+        #check if paths/files exist
+        config_exists = os.path.exists(os.path.join(configpath, "config.ini"))
+        configpath_exists = os.path.exists(configpath)
+        saves_exist = os.path.exists(savespath)
+
+        if configpath_exists == False:
+            self.console.print(f"[bright_black]Initializing config path ({configpath})...[/]")
+            os.mkdir(configpath)
+
+        # make paths/files
+        if config_exists == False:
+            full_config_path = os.path.join(configpath, "config.ini")
+            self.console.print(f"[bright_black]Initializing config file ({full_config_path})...[/]")
+            config = configparser.ConfigParser()
+            config["SELECTED_CONFIG"] = {"configname": "BASE_CONFIG"}
+            config["BASE_CONFIG"] = {
+                "ModelName": "gpt-3.5-turbo",
+                "Temperature": "1",
+                "PresencePenalty": "0",
+                "FrequencyPenalty": "0",
+                "SystemMessage": "You are a helpful assistant named GPTerminator.",
+                "CommandInitiator": "!",
+                "SavePath": f"{savespath}",
+            }
+            with open(full_config_path, "w") as configfile:
+                config.write(configfile)
+        
+        if saves_exist == False:
+            self.console.print(f"[bright_black]Initializing save path ({savespath})...[/]")
+            os.mkdir(savespath)
+
     def run(self):
+        self.checkDirs()
         self.loadConfig()
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)
