@@ -13,24 +13,25 @@
 
 ### To use this terminal interface, follow these steps:
 
-#### - Install GPTerminator 
+#### 1) Install GPTerminator
 ```
 git clone https://github.com/AineeJames/ChatGPTerminator
 pip install .
 ```
+or
 ```
 pip install gpterminator
 ```
-#### - Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
+#### 2) Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
 ```
 export OPENAI_API_KEY=PUT_API_KEY_HERE
 ```
-#### - Run the following command to start the ChatGPT terminal interface:
+#### 3) Run the following command to start the ChatGPT terminal interface:
 ```
 gpterm
 ```
-#### - You can now start chatting. Type a message and press Enter to get a response.
-#### - Type `!help` for a list of commands to use
+#### 4) You can now start chatting. Type a message and press Enter to get a response.
+#### 5) Type `!help` for a list of commands to use
 
 ## Running with podman/docker (optional) :package:
 #### Build the image and provide the `APIKEY`
