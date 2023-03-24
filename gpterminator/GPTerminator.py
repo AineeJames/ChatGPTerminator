@@ -30,11 +30,11 @@ class GPTerminator:
         self.cmds = {
             "quit": "quits the program",
             "help": "prints a list of acceptable commands",
-            "regen": "requeries the last message",
+            "regen": "generates a new response from the last message",
             "save": "saves the chat history",
             "ccpy": "copies code blocks from the last response",
             "pconf": "prints out the users current config file",
-            "load": "loads a previosly saved chatlog",
+            "load": "loads a previously saved chatlog",
             "setconf": "switches to a new config",
             "cpyall": "copies all raw text from the previous response",
             "dalle": "generates images and provides a link for download",
