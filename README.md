@@ -14,20 +14,20 @@
 ### To use this terminal interface, follow these steps:
 
 #### 1) Install GPTerminator
-```
+```zsh
 git clone https://github.com/AineeJames/ChatGPTerminator
 pip install .
 ```
 or
-```
+```zsh
 pip install gpterminator
 ```
 #### 2) Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
-```
+```zsh
 export OPENAI_API_KEY=PUT_API_KEY_HERE
 ```
 #### 3) Run the following command to start the ChatGPT terminal interface:
-```
+```zsh
 gpterm
 ```
 #### 4) You can now start chatting. Type a message and press Enter to get a response.
