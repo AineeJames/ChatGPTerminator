@@ -13,17 +13,30 @@
 
 To use this terminal interface, follow these steps:
 
-1. Either clone this repository to your local machine and run `pip install .` or install it from PyPi by running `pip install gpterminator`
+1. Either clone this repository to your local machine and run 
+```
+pip install .
+```
+or install it from `PyPi` by running
+```
+pip install gpterminator
+```
 
-2. Set the OPENAI_API_KEY env variable (you may want this in your .rc file): `export OPENAI_API_KEY=PUT_API_KEY_HERE`
+2. Set the OPENAI_API_KEY env variable (you may want this in your .rc file):
+```
+export OPENAI_API_KEY=PUT_API_KEY_HERE
+```
 
-3. Run the following command to start the ChatGPT terminal interface: `gpterm`
+3. Run the following command to start the ChatGPT terminal interface:
+```
+gpterm
+```
 
 4. You can now start chatting. Type a message and press Enter to get a response.
 
-5. Type !help for a list of commands to use
+5. Type `!help` for a list of commands to use
 
-## Running with podman/docker :package:
+## Running with podman/docker (optional) :package:
 #### Build the image and provide the `APIKEY`
 ```bash
 podman build \ 
@@ -38,12 +51,6 @@ podman run -it --rm --name gpterm gpterm
 ```bash
 echo "alias gpterm='podman run -it --rm --name gpterm gpterm'" >> ~/.bashrc
 ```
-
-## Usage :bulb:
-
-
-<img src="./imgs/demo.gif" width="500" />
-
 
 ## Commands :exclamation:
 
