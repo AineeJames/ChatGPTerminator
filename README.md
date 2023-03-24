@@ -9,7 +9,7 @@
 </p>
 
 
-## Getting Started :rocket:
+## Getting Started & Installation :rocket:
 
 To use this terminal interface, follow these steps:
 
