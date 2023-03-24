@@ -13,6 +13,8 @@ from prompt_toolkit import prompt
 from pathlib import Path
 import pyperclip
 import time
+import requests
+import climage
 
 class GPTerminator:
     def __init__(self):
@@ -238,7 +240,11 @@ class GPTerminator:
         ) as status:
             status.update(status="[bright_black]Generating image...[/]")
             img_response = openai.Image.create(prompt=user_in, n=1, size="1024x1024")
-        image_url = img_response["data"][0]["url"]
+            image_url = img_response["data"][0]["url"]
+            resp = requests.get(image_url, stream=True)
+            cli_image = climage.convert(resp.raw, is_unicode=True)
+        self.console.print(f"[bold green]Image preview:[/]")
+        print(cli_image)
         self.console.print(f"[bold green]Link: [/][bright_black]{image_url}[/]")
         pyperclip.copy(image_url)
         self.console.print(f"[bright_black]Image link copied to clipboard![/]")
