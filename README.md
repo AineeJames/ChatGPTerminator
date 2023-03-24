@@ -45,6 +45,12 @@ echo "alias gpterm='podman run -it --rm --name gpterm gpterm'" >> ~/.bashrc
 <img src="./imgs/demo.gif" width="500" />
 
 
+## Commands :exclamation:
+
+Power up you chat experience with commands!
+By typing `!help` you can view all the possible commands along with a short desctiption.
+Please check out the [wiki](https://github.com/AineeJames/ChatGPTerminator/wiki/Commands) for more detailed help with commands!
+
 ## Configuration :gear:
 
 The config.ini directory resides in different locations dependent on your OS. In order to find the path, run GPTerminator and then type `!pconf`.
