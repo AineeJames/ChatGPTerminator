@@ -1,13 +1,21 @@
-<h1 align="center">GPTerminator :robot:</h1>
+<h1 align="center">GPTerminator :robot: - ChatGPT in the Terminal!</h1>
 <p align="center">
 <img src="./imgs/panel_output.png" width="600" />
 </p>
-<p align="center">This terminal interface provides a convenient way to interact with OpenAI's chat completion and image generation API's using your command line interface.</p>
+<p align="center">GPTerminator provides a convenient way to interact with OpenAI's chat completion and image generation API's using your command line interface.</p>
 <p align="center">
 <img src="https://img.shields.io/github/last-commit/AineeJames/ChatGPTerminator?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=302D41" />
 <img src="https://img.shields.io/github/stars/AineeJames/ChatGPTerminator?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=302D41" />
 </p>
 
+## Features :sparkles:
+
+- :mag: Chat completion 
+- :floppy_disk: Save and load chat sessions 
+- :bar_chart: File analysis 
+- :art: Image generation with Dalle 
+- :clipboard: Easy code and text copying using 
+- :repeat: Regeneration of responses
 
 ## Getting Started & Installation :rocket:
 
