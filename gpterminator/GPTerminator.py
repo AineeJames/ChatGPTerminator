@@ -28,16 +28,17 @@ class GPTerminator:
         self.msg_hist = []
         self.cmd_init = ""
         self.cmds = {
-            "quit": "quits the program",
-            "help": "prints a list of acceptable commands",
-            "regen": "generates a new response from the last message",
-            "save": "saves the chat history",
-            "ccpy": "copies code blocks from the last response",
-            "pconf": "prints out the users current config file",
-            "load": "loads a previously saved chatlog",
-            "setconf": "switches to a new config",
-            "cpyall": "copies all raw text from the previous response",
-            "dalle": "generates images and provides a link for download",
+            "quit": ["q", "quits the program"],
+            "help": ["h", "prints a list of acceptable commands"],
+            "pconf": [None, "prints out the users current config file"],
+            "setconf": [None, "switches to a new config"],
+            "regen": ["r", "generates a new response from the last message"],
+            "load": ["l", "loads a previously saved chatlog"],
+            "save": ["s", "saves the chat history"],
+            "ifile": [None, "allows the user to analyze files with a prompt"],
+            "cpyall": ["ca", "copies all raw text from the previous response"],
+            "ccpy": ["cc", "copies code blocks from the last response"],
+            "dalle": [None, "generates images and provides a link for download"],
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -73,7 +74,8 @@ class GPTerminator:
     def printCmds(self):
         self.console.print(f"[bold bright_black]Command : description[/]")
         for cmd, desc in self.cmds.items():
-            self.console.print(f"[bright_black]{self.cmd_init}{cmd} : {desc}[/]")
+            short = "" if desc[0] is None else f"({desc[0]})"
+            self.console.print(f"[bright_black]{self.cmd_init}{cmd} {short}: {desc[1]}[/]")
 
     def saveChat(self):
         if self.prompt_count == 0:
@@ -249,6 +251,38 @@ class GPTerminator:
         pyperclip.copy(image_url)
         self.console.print(f"[bright_black]Image link copied to clipboard![/]")
 
+    def analyzeFile(self):
+        while True:
+            self.console.print(
+                f"[yellow]|!|[/][bold green] Provide the file path to analyze [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
+            user_in = prompt().strip()
+            if os.path.exists(user_in):
+                with open(user_in, 'r') as file:
+                    file_content = file.read()
+                break
+            else:
+                self.printError(f"{user_in} cannot be found")
+
+        while True:
+            self.console.print(
+                f"[yellow]|{self.prompt_count}|[/][bold green] Prompt for {user_in} [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
+            user_prmt = prompt().strip()
+            if user_prmt != "":
+                break
+            else:
+                self.printError(f"you cannot have an empty prompt")
+
+        msg = f"{user_prmt}: '{file_content}'"
+        self.getResponse(msg)
+
+            
+
+
+
     def queryUser(self):
         self.console.print(
             f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -260,12 +294,12 @@ class GPTerminator:
         elif user_in[0] == self.cmd_init:
             raw_cmd = user_in.split(self.cmd_init)
             cmd = raw_cmd[1].lower().split()[0]
-            if cmd in self.cmds:
-                if cmd == "quit":
+            if cmd in self.cmds or cmd in [shrt[0] for shrt in self.cmds.values()]:
+                if cmd == "quit" or cmd == "q":
                     sys.exit()
-                elif cmd == "help":
+                elif cmd == "help" or cmd == "h":
                     self.printCmds()
-                elif cmd == "regen":
+                elif cmd == "regen" or cmd == "r":
                     if self.prompt_count > 0:
                         self.msg_hist.pop(-1)
                         last_msg = self.msg_hist.pop(-1)["content"]
@@ -275,23 +309,25 @@ class GPTerminator:
                         self.printError(
                             "can't regenenerate, there is no previous prompt"
                         )
-                elif cmd == "save":
+                elif cmd == "save" or cmd == "s":
                     self.saveChat()
-                elif cmd == "ccpy":
+                elif cmd == "ccpy" or cmd == "cc":
                     if self.prompt_count > 0:
                         self.copyCode()
                     else:
                         self.printError("can't copy, there is no previous response")
                 elif cmd == "pconf":
                     self.printConfig()
-                elif cmd == "load":
+                elif cmd == "load" or cmd == "l":
                     self.loadChatlog()
                 elif cmd == "setconf":
                     self.setConfig()
-                elif cmd == "cpyall":
+                elif cmd == "cpyall" or cmd == "ca":
                     self.copyAll()
                 elif cmd == "dalle":
                     self.useDalle()
+                elif cmd == "ifile":
+                    self.analyzeFile()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
