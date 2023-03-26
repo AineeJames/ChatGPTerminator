@@ -5,6 +5,8 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.live import Live
+from rich.syntax import Syntax
+from rich.columns import Columns
 import os
 import json
 import sys
@@ -97,17 +99,21 @@ class GPTerminator:
         while True:
             try:
                 code_block = last_resp.split("```")[index]
+                lexer = code_block.split("\n")[0]
                 code_block = "\n".join(code_block.split("\n")[1:])
                 code_block_list.append(code_block)
             except:
                 lst_len = len(code_block_list)
                 if lst_len == 1:
                     pyperclip.copy(code_block_list[0])
+                    self.console.print(f"[bright_black]Copied text to keyboard...[/]")
                 elif lst_len > 1:
+                    choice_list = []
                     for num, code_block in enumerate(code_block_list):
-                        self.console.log(
-                            Panel.fit(code_block, title=f"Option {num + 1}")
-                        )
+                        code_block = Syntax(code_block, lexer)
+                        choice = Panel(code_block, title=f"[bright_black]Option[/] [red]{num + 1}[/]", border_style="bright_black", style="bold")
+                        choice_list.append(choice)
+                    self.console.print(Columns(choice_list))
                     while True:
                         self.console.print(
                             f"[yellow]|{self.cmd_init}|[/][bold green] Which code block do you want [/bold green][bold gray]> [/bold gray]",
@@ -121,6 +127,7 @@ class GPTerminator:
                             pass
                         self.printError("incorrect input, try again")
                     pyperclip.copy(code_block_list[idx - 1])
+                    self.console.print(f"[bright_black]Copied text to keyboard...[/]")
                 else:
                     self.printError("could not find code in previous response")
                 return
