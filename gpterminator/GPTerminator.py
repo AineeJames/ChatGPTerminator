@@ -8,6 +8,7 @@ from rich.live import Live
 from rich.syntax import Syntax
 from rich.columns import Columns
 import os
+import subprocess
 import json
 import sys
 import configparser
@@ -31,6 +32,7 @@ class GPTerminator:
         self.cmd_init = ""
         self.cmds = {
             "quit": ["q", "quits the program"],
+            "version": ["v", "print gpterm version and release info"],
             "help": ["h", "prints a list of acceptable commands"],
             "pconf": [None, "prints out the users current config file"],
             "setconf": [None, "switches to a new config"],
@@ -306,6 +308,11 @@ class GPTerminator:
                     sys.exit()
                 elif cmd == "help" or cmd == "h":
                     self.printCmds()
+                elif cmd == "version" or cmd == "v":
+                    release_info = subprocess.run(["pip", "show", "gpterminator"], capture_output=True, text=True)
+                    for line in release_info.stdout.split("\n"):
+                        if line.startswith("Version") or line.startswith("Author:"):
+                            print(line)
                 elif cmd == "regen" or cmd == "r":
                     if self.prompt_count > 0:
                         self.msg_hist.pop(-1)
