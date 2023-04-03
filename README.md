@@ -24,6 +24,7 @@
 #### 1) Install GPTerminator
 ```zsh
 git clone https://github.com/AineeJames/ChatGPTerminator
+cd ChatGPTerminator
 pip install .
 ```
 or
