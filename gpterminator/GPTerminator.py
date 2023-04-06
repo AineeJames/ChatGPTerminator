@@ -435,6 +435,7 @@ class GPTerminator:
 |_____|__|    |_| |___|_| |_|_|_|_|_|_|__,|_| |___|_|  
 """
         self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end="")
+        self.console.print(f"[bright_black]Version: v0.1.10[/]")
         self.console.print(f"[bright_black]System prompt: {self.sys_prmpt}[/]")
         self.console.print(f"[bright_black]Model: {self.model}[/]")
         self.console.print(
