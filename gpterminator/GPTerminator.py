@@ -35,6 +35,7 @@ class GPTerminator:
             "pconf": [None, "prints out the users current config file"],
             "setconf": [None, "switches to a new config"],
             "regen": ["r", "generates a new response from the last message"],
+            "new": ["n", "removes chat history and starts a new session"],
             "load": ["l", "loads a previously saved chatlog"],
             "save": ["s", "saves the chat history"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
@@ -335,6 +336,10 @@ class GPTerminator:
                     self.useDalle()
                 elif cmd == "ifile":
                     self.analyzeFile()
+                elif cmd == "new" or cmd == "n":
+                    self.msg_hist = self.msg_hist[:1]
+                    self.prompt_count = 0
+                    self.printBanner()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
