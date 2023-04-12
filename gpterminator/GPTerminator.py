@@ -285,6 +285,7 @@ class GPTerminator:
                 self.printError(f"you cannot have an empty prompt")
 
         msg = f"{user_prmt}: '{file_content}'"
+        self.prompt_count += 1
         self.getResponse(msg)
 
             
