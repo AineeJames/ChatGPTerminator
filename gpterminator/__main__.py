@@ -1,4 +1,4 @@
-from . import GPTerminator
+from gpterminator import GPTerminator
 
 
 def main():
@@ -7,4 +7,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (KeyboardInterrupt, EOFError):
+        print("Goodbye! Feel free to ask me any questions in the future.")
+        exit(0)
