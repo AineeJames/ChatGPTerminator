@@ -111,6 +111,9 @@ CodeTheme =
 > **Note**
 > More details on some settings can be found [here](https://platform.openai.com/docs/api-reference/chat/create)
 
+> **Note**
+> Valid color schemes can be found [here](https://pygments.org/styles/)
+
 > **Note** If you change the `CommandInitiator`, you will now type `<new-command>` to execute commands...
 
 After saving the config file, run `gpterm`, then enter `!setconf` and select which config you wish to use. You can also run the `!pconf` command to view the current config details.
