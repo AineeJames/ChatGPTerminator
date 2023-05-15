@@ -1,22 +1,24 @@
+import configparser
+import json
+import os
+import sys
+import time
+from pathlib import Path
+
+import climage
 import openai
-from openai import error
+import pyperclip
+import requests
 import tiktoken
+from openai import error
+from prompt_toolkit import prompt
+from rich.columns import Columns
 from rich.console import Console
+from rich.live import Live
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.live import Live
 from rich.syntax import Syntax
-from rich.columns import Columns
-import os
-import json
-import sys
-import configparser
-from prompt_toolkit import prompt
-from pathlib import Path
-import pyperclip
-import time
-import requests
-import climage
+
 
 class GPTerminator:
     def __init__(self):
@@ -70,6 +72,7 @@ class GPTerminator:
         self.temperature = config[self.config_selected]["Temperature"]
         self.presence_penalty = config[self.config_selected]["PresencePenalty"]
         self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
+        self.code_theme = config[self.config_selected]["CodeTheme"]
 
     def printError(self, msg):
         self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
@@ -112,7 +115,12 @@ class GPTerminator:
                     choice_list = []
                     for num, code_block in enumerate(code_block_list):
                         code_block = Syntax(code_block, lexer)
-                        choice = Panel(code_block, title=f"[bright_black]Option[/] [red]{num + 1}[/]", border_style="bright_black", style="bold")
+                        choice = Panel(
+                            code_block,
+                            title=f"[bright_black]Option[/] [red]{num + 1}[/]",
+                            border_style="bright_black",
+                            style="bold",
+                        )
                         choice_list.append(choice)
                     self.console.print(Columns(choice_list))
                     while True:
@@ -150,9 +158,7 @@ class GPTerminator:
         for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
             file_str = file_name.split(".")[0]
             file_dict[idx + 1] = file_str
-            self.console.print(
-                f"[bold bright_black]({idx + 1}) > [/][red]{file_str}[/]"
-            )
+            self.console.print(f"[bold bright_black]({idx + 1}) > [/][red]{file_str}[/]")
         if len(file_dict) == 0:
             self.printError("you have no saved chats")
             return
@@ -166,9 +172,7 @@ class GPTerminator:
                 break
             else:
                 self.printError(f"{selection} is not a valid selection")
-        with open(
-            Path(f"{self.save_path}") / f"{file_dict[int(selection)]}.json", "r"
-        ) as f:
+        with open(Path(f"{self.save_path}") / f"{file_dict[int(selection)]}.json", "r") as f:
             save = json.load(f)
         self.prompt_count = 0
         self.msg_hist = save
@@ -186,7 +190,7 @@ class GPTerminator:
                 num_tokens = len(encoding.encode(msg["content"]))
                 subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
                 md = Panel(
-                    Markdown(msg["content"]),
+                    Markdown(msg["content"], self.code_theme),
                     border_style="bright_black",
                     title="[bright_black]Assistant[/]",
                     title_align="left",
@@ -206,9 +210,7 @@ class GPTerminator:
         for section in config:
             if str(section) != "DEFAULT" and str(section) != "SELECTED_CONFIG":
                 config_dict[config_num] = str(section)
-                self.console.print(
-                    f"[bright_black]({config_num}) > [/][red]{str(section)}[/]"
-                )
+                self.console.print(f"[bright_black]({config_num}) > [/][red]{str(section)}[/]")
                 config_num += 1
         while True:
             self.console.print(
@@ -245,9 +247,7 @@ class GPTerminator:
                 break
             else:
                 self.printError("the image prompt should be at least 10 characters")
-        with self.console.status(
-            "", spinner="bouncingBar", spinner_style="bold red"
-        ) as status:
+        with self.console.status("", spinner="bouncingBar", spinner_style="bold red") as status:
             status.update(status="[bright_black]Generating image...[/]")
             img_response = openai.Image.create(prompt=user_in, n=1, size="1024x1024")
             image_url = img_response["data"][0]["url"]
@@ -267,7 +267,7 @@ class GPTerminator:
             )
             user_in = prompt().strip()
             if os.path.exists(user_in):
-                with open(user_in, 'r') as file:
+                with open(user_in, "r") as file:
                     file_content = file.read()
                 break
             else:
@@ -287,10 +287,6 @@ class GPTerminator:
         msg = f"{user_prmt}: '{file_content}'"
         self.prompt_count += 1
         self.getResponse(msg)
-
-            
-
-
 
     def queryUser(self):
         self.console.print(
@@ -315,9 +311,7 @@ class GPTerminator:
                         self.prompt_count -= 1
                         return last_msg
                     else:
-                        self.printError(
-                            "can't regenenerate, there is no previous prompt"
-                        )
+                        self.printError("can't regenenerate, there is no previous prompt")
                 elif cmd == "save" or cmd == "s":
                     self.saveChat()
                 elif cmd == "ccpy" or cmd == "cc":
@@ -386,7 +380,7 @@ class GPTerminator:
         subtitle_str = f"[bright_black]Tokens:[/] [bold red]{0}[/] | "
         subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {0.0}s [/]"
         md = Panel(
-            Markdown(""),
+            Markdown("", self.code_theme),
             border_style="bright_black",
             title="[bright_black]Assistant[/]",
             title_align="left",
@@ -401,16 +395,16 @@ class GPTerminator:
                 collected_chunks.append(chunk)  # save the event response
                 chunk_message = chunk["choices"][0]["delta"]  # extract the message
                 collected_messages.append(chunk_message)  # save the message
-                full_reply_content = "".join(
-                    [m.get("content", "") for m in collected_messages]
-                )
+                full_reply_content = "".join([m.get("content", "") for m in collected_messages])
                 encoding = tiktoken.encoding_for_model(self.model)
                 num_tokens = len(encoding.encode(full_reply_content))
                 time_elapsed_s = time.time() - start_time
                 subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
-                subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
+                subtitle_str += (
+                    f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
+                )
                 md = Panel(
-                    Markdown(full_reply_content),
+                    Markdown(full_reply_content, self.code_theme),
                     border_style="bright_black",
                     title="[bright_black]Assistant[/]",
                     title_align="left",
@@ -444,7 +438,6 @@ class GPTerminator:
         )
 
     def checkDirs(self):
-
         # get paths
         if "APPDATA" in os.environ:
             confighome = os.environ["APPDATA"]
@@ -455,7 +448,7 @@ class GPTerminator:
         configpath = os.path.join(confighome, "gpterminator")
         savespath = os.path.join(configpath, "saves")
 
-        #check if paths/files exist
+        # check if paths/files exist
         config_exists = os.path.exists(os.path.join(configpath, "config.ini"))
         configpath_exists = os.path.exists(configpath)
         saves_exist = os.path.exists(savespath)
@@ -478,10 +471,11 @@ class GPTerminator:
                 "SystemMessage": "You are a helpful assistant named GPTerminator.",
                 "CommandInitiator": "!",
                 "SavePath": f"{savespath}",
+                "CodeTheme": "monokai",
             }
             with open(full_config_path, "w") as configfile:
                 config.write(configfile)
-        
+
         if saves_exist == False:
             self.console.print(f"[bright_black]Initializing save path ({savespath})...[/]")
             os.mkdir(savespath)
