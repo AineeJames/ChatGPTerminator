@@ -480,7 +480,7 @@ class GPTerminator:
             self.console.print(f"[bright_black]Initializing save path ({savespath})...[/]")
             os.mkdir(savespath)
 
-    def run(self):
+    def run(self, passed_input=None):
         self.checkDirs()
         self.loadConfig()
         if not os.path.exists(self.save_path):
@@ -488,8 +488,14 @@ class GPTerminator:
         self.setApiKey()
         self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
         self.printBanner()
+
+        if passed_input is not None:
+            self.prompt_count += 1
+            self.getResponse(passed_input)
+
         while True:
             usr_input = self.queryUser()
+
             if usr_input is not None:
                 self.prompt_count += 1
                 self.getResponse(usr_input)
