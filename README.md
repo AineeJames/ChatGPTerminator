@@ -41,15 +41,15 @@ pip install gpterminator
 export OPENAI_API_KEY=<YOUR_API_KEY>
 ```
 
-#### 3) Run the following command to start the ChatGPT terminal interface:
+#### 3) Start GPTerminator by running one of the following commands:
 
 ```shell
 gpterm
+# or
+gpterm <input> # ex: gpterm write a hello world function in Python
 ```
 
-#### 4) You can now start chatting. Type a message and press Enter to get a response.
-
-#### 5) Type `!help` for a list of commands to use
+#### 4) Type `!help` for a list of commands to use
 
 ## Running with podman/docker (optional) :package:
 
