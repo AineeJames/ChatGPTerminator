@@ -294,6 +294,7 @@ class GPTerminator:
             end="",
         )
         user_in = prompt().strip()
+        #     sys.exit()
         if user_in == "":
             self.printError("user input is empty")
         elif user_in[0] == self.cmd_init:
@@ -494,8 +495,14 @@ class GPTerminator:
             self.getResponse(passed_input)
 
         while True:
-            usr_input = self.queryUser()
-
-            if usr_input is not None:
-                self.prompt_count += 1
-                self.getResponse(usr_input)
+            # terminate while `ctrl + c / ctrl + d` is pressed
+            try:
+                usr_input = self.queryUser()
+                if usr_input is not None:
+                    self.prompt_count += 1
+                    self.getResponse(usr_input)
+            except (KeyboardInterrupt, EOFError):
+                self.console.print(
+                    f"[bright_black]Goodbye, have a great day! "
+                    f"Don't hesitate to reach out if you need any help in the future.[/]")
+                exit()
