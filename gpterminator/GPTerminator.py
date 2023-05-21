@@ -28,7 +28,7 @@ class GPTerminator:
         self.temperature = ""
         self.presence_penalty = ""
         self.frequency_penalty = ""
-        self.sys_prmpt = ""
+        self.sys_prompt = ""
         self.msg_hist = []
         self.cmd_init = ""
         self.cmds = {
@@ -48,6 +48,7 @@ class GPTerminator:
         self.api_key = ""
         self.prompt_count = 0
         self.save_path = ""
+        self.code_theme = ""
         self.console = Console()
 
     def getConfigPath(self):
@@ -61,18 +62,22 @@ class GPTerminator:
         self.config_path = configpath
 
     def loadConfig(self):
-        self.getConfigPath()
-        config = configparser.ConfigParser()
-        config.read(self.config_path)
-        self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
-        self.model = config[self.config_selected]["ModelName"]
-        self.sys_prmpt = config[self.config_selected]["SystemMessage"]
-        self.cmd_init = config[self.config_selected]["CommandInitiator"]
-        self.save_path = config[self.config_selected]["SavePath"]
-        self.temperature = config[self.config_selected]["Temperature"]
-        self.presence_penalty = config[self.config_selected]["PresencePenalty"]
-        self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
-        self.code_theme = config[self.config_selected]["CodeTheme"]
+        try:
+            self.getConfigPath()
+            config = configparser.ConfigParser()
+            config.read(self.config_path)
+            self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
+            self.model = config[self.config_selected]["ModelName"]
+            self.sys_prompt = config[self.config_selected]["SystemMessage"]
+            self.cmd_init = config[self.config_selected]["CommandInitiator"]
+            self.save_path = config[self.config_selected]["SavePath"]
+            self.temperature = config[self.config_selected]["Temperature"]
+            self.presence_penalty = config[self.config_selected]["PresencePenalty"]
+            self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
+            self.code_theme = config[self.config_selected]["CodeTheme"]
+        except KeyError as e:
+            self.printError("Config file is missing required fields: " + str(e))
+            sys.exit(1)
 
     def printError(self, msg):
         self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
@@ -432,7 +437,7 @@ class GPTerminator:
 """
         self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end="")
         self.console.print(f"[bright_black]Version: v0.1.11[/]")
-        self.console.print(f"[bright_black]System prompt: {self.sys_prmpt}[/]")
+        self.console.print(f"[bright_black]System prompt: {self.sys_prompt}[/]")
         self.console.print(f"[bright_black]Model: {self.model}[/]")
         self.console.print(
             f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
@@ -487,7 +492,7 @@ class GPTerminator:
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)
         self.setApiKey()
-        self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
+        self.msg_hist.append({"role": "system", "content": self.sys_prompt})
         self.printBanner()
 
         if passed_input is not None:
